@@ -1,0 +1,124 @@
+<div *ngIf="tableData">
+  <div class="d-flex justify-content-between">
+    <div class="text-muted p-2">
+      <ng-container *ngIf="(getCheckedRowsNumber() > 0) ">
+        <span class="font-weight-bold">{{getCheckedRowsNumber()}}</span>
+        <span *ngIf="getCheckedRowsNumber() ==1"> {{'elementos seleccionado' | translate }}.</span>
+        <span *ngIf="getCheckedRowsNumber() !=1"> {{'elementos seleccionados' | translate }}.</span>
+      </ng-container>
+    </div>
+    <div class="d-flex">
+      <div class="justify-content-end">
+        <ng-container *ngFor="let tableAction of settings.tableActions">
+          <button *ngIf="(getCheckedRowsNumber() > 0) || (tableAction.visible === true)"
+                  (click)="tableAction.callback(getSelectedRows())"
+                  class="{{tableAction.classes}}"><i class="{{tableAction.icon}}"></i> {{tableAction.name | translate}}
+          </button>
+        </ng-container>
+      </div>
+      <div>
+        <div ngbDropdown [placement]="'bottom-right'" class="d-inline-block">
+          <button class="btn btn-link text-dark" id="dropdownBasic1" ngbDropdownToggle>{{ 'Columnas' | translate }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="p-2">
+            <div *ngFor="let column of settings.columns; let index = index;">
+              <div class="custom-control custom-checkbox">
+                <input [(ngModel)]="column.show" type="checkbox" class="custom-control-input"
+                       id="{{'col-visibility-' + index + uuid}}" name="sdssds">
+                <label class="custom-control-label" for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table {{settings.classes}}">
+    <thead>
+    <tr>
+      <th width="50px" *ngIf="settings.showchecksColumn">
+        <div class="custom-control custom-checkbox">
+          <input [(ngModel)]="selectAllCheck" (change)="selectAll($event)" type="checkbox" class="custom-control-input"
+                 id="{{-1 + uuid}}" name="example1">
+          <label class="custom-control-label" for="{{-1 + uuid}}"></label>
+        </div>
+      </th>
+      <th [hidden]="column.show === false" sortable="{{column.property}}" (sort)="onSort($event)"
+          class="{{column.classes}}" style="cursor: pointer" [ngStyle]="{'width': column.width}"
+          *ngFor="let column of settings.columns; let index = index;">
+        {{column.name | translate}}
+        <i *ngIf="column.direction === 'desc'" class="fe fe-chevron-down"></i>
+        <i *ngIf="column.direction === 'asc'" class="fe fe-chevron-up"></i>
+      </th>
+      <th *ngIf="settings.rowActions"></th>
+    </tr>
+    </thead>
+    <tbody #table>
+    <tr (click)="rowClick(row)"
+        *ngFor="let row of tableData | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let index = index;"
+        [class]="getRowClass(row)">
+      <td *ngIf="settings.showchecksColumn">
+        <div class="custom-control custom-checkbox">
+          <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)" class="custom-control-input"
+                 id="{{index + uuid}}" name="example1">
+          <label class="custom-control-label" for="{{index + uuid}}"></label>
+        </div>
+      </td>
+      <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
+          [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+          *ngFor="let column of settings.columns; let index = index;">
+        <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
+
+        <span *ngIf="column.type === 'icon'">
+          <ng-container *ngFor="let iconCase of column.iconCases" [ngSwitch]="row[column.property]">
+            <span *ngSwitchCase="iconCase.id" class="{{iconCase.class}}">
+            <i class="{{iconCase.icon}}"></i>
+            </span>
+          </ng-container>
+        </span>
+
+        <span *ngIf="column.type === 'date'">{{row[column.property] | date: 'dd/MM/yyyy'}}</span>
+
+        <span *ngIf="column.type === 'anchor'"><button class="btn btn-link p-0" (click)="column.callback(row)">{{row[column.property]}}</button></span>
+
+        <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
+
+        <div *ngIf="column.type === 'custom'"
+             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))">
+        </div>
+      </td>
+      <td *ngIf="settings.rowActions" class="text-right">
+        <span *ngFor="let action of settings.rowActions" class="ml-2">
+        <button *ngIf="getActionVisivility(action, row)"
+                class="btn btn-sm badge text-uppercase {{action.classes}}"
+                (click)="action.callback(row)">
+          <i class="{{action.icon}}"></i>{{action.name | translate}}
+        </button>
+      </span>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
+      <span *ngIf="tableData.length >= pageSize">
+        <span
+          *ngIf="page >= (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{tableData.length%pageSize}}</span>
+        <span *ngIf="page < (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{pageSize}}</span>
+      </span>
+      <span *ngIf="pageSize > tableData.length">{{tableData.length}}</span>
+    </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
+    </div>
+    <ngb-pagination
+      #pagination
+      [collectionSize]="tableData.length"
+      [(page)]="page"
+      [maxSize]="7"
+      [pageSize]="pageSize">
+      <ng-template ngbPaginationEllipsis>...</ng-template>
+    </ngb-pagination>
+  </div>
+</div>
