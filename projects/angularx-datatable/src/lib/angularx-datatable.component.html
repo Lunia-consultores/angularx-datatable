@@ -25,7 +25,8 @@
               <div class="custom-control custom-checkbox">
                 <input [(ngModel)]="column.show" type="checkbox" class="custom-control-input"
                        id="{{'col-visibility-' + index + uuid}}" name="sdssds">
-                <label class="custom-control-label" for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
+                <label class="custom-control-label"
+                       for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
               </div>
             </div>
           </div>
@@ -38,7 +39,8 @@
     <tr [formGroup]="searchForm">
       <th width="50px" *ngIf="settings.showchecksColumn">
         <div class="custom-control custom-checkbox">
-          <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox" class="custom-control-input"
+          <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox"
+                 class="custom-control-input"
                  id="{{-1 + uuid}}" name="example1">
           <label class="custom-control-label" for="{{-1 + uuid}}"></label>
         </div>
@@ -51,7 +53,7 @@
           <i *ngIf="column.direction === 'desc'" class="fas fa-chevron-down"></i>
           <i *ngIf="column.direction === 'asc'" class="fas fa-chevron-up"></i>
         </div>
-        <div *ngIf="settings.enableColumnFilters">
+        <div *ngIf="settings.enableColumnFilters && column.type != 'custom'">
           <input type="text" class="form-control form-control-sm" [formControlName]="column.property">
         </div>
 
@@ -85,7 +87,8 @@
 
         <span *ngIf="column.type === 'date'">{{row[column.property] | date: 'dd/MM/yyyy'}}</span>
 
-        <span *ngIf="column.type === 'anchor'"><button class="btn btn-link p-0" (click)="column.callback(row)">{{row[column.property]}}</button></span>
+        <span *ngIf="column.type === 'anchor'"><button class="btn btn-link p-0"
+                                                       (click)="column.callback(row)">{{row[column.property]}}</button></span>
 
         <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
 
@@ -111,7 +114,7 @@
     <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
       <span *ngIf="tableData.length >= pageSize">
         <span
-          *ngIf="page >= (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{tableData.length%pageSize}}</span>
+          *ngIf="page >= (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{tableData.length % pageSize}}</span>
         <span *ngIf="page < (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{pageSize}}</span>
       </span>
       <span *ngIf="pageSize > tableData.length">{{tableData.length}}</span>
