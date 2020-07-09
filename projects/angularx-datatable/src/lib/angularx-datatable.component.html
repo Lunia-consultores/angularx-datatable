@@ -51,7 +51,7 @@
           <i *ngIf="column.direction === 'desc'" class="fas fa-chevron-down"></i>
           <i *ngIf="column.direction === 'asc'" class="fas fa-chevron-up"></i>
         </div>
-        <div>
+        <div *ngIf="settings.enableColumnFilters">
           <input type="text" class="form-control form-control-sm" [formControlName]="column.property">
         </div>
 
@@ -90,7 +90,7 @@
         <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
 
         <div *ngIf="column.type === 'custom'"
-             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))">
+             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))" (click)="column.callback(row)">
         </div>
       </td>
       <td *ngIf="settings.rowActions" class="text-right">
@@ -125,8 +125,4 @@
       <ng-template ngbPaginationEllipsis>...</ng-template>
     </ngb-pagination>
   </div>
-</div>
-<div class="row">
-<div class="col-6"><pre>{{tableData | json}}</pre></div>
-<div class="col-6"><pre>{{originalTableData | json}}</pre></div>
 </div>

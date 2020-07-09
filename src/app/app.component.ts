@@ -20,6 +20,17 @@ export class AppComponent implements OnInit{
         name: 'Apellidos',
         property: 'apellidos',
       },
+      {
+        name: 'Movida custom',
+        property: '',
+        type: 'custom',
+        callback: (row) => {
+          alert('oleeeee' + row.id);
+        },
+        customContent: () => {
+          return `<div>${'mu rico'}</div>`;
+        }
+      }
     ],
     rowActions: [
       {
@@ -48,7 +59,7 @@ export class AppComponent implements OnInit{
     pageSize: 10,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
-    enableColumnFilters: true
+    // enableColumnFilters: true
   };
 
   ngOnInit(): void {
