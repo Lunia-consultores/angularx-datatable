@@ -87,7 +87,7 @@ export class AppComponent implements OnInit{
       {
         id: 5,
         nombre: 'Black',
-        apellidos: 'Coronel'
+        apellidos: null
       },
       {
         id: 6,
