@@ -33,23 +33,28 @@
       </div>
     </div>
   </div>
-
   <table class="table {{settings.classes}}">
     <thead>
-    <tr>
+    <tr [formGroup]="searchForm">
       <th width="50px" *ngIf="settings.showchecksColumn">
         <div class="custom-control custom-checkbox">
-          <input [(ngModel)]="selectAllCheck" (change)="selectAll($event)" type="checkbox" class="custom-control-input"
+          <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox" class="custom-control-input"
                  id="{{-1 + uuid}}" name="example1">
           <label class="custom-control-label" for="{{-1 + uuid}}"></label>
         </div>
       </th>
-      <th [hidden]="column.show === false" sortable="{{column.property}}" (sort)="onSort($event)"
+      <th [hidden]="column.show === false"
           class="{{column.classes}}" style="cursor: pointer" [ngStyle]="{'width': column.width}"
           *ngFor="let column of settings.columns; let index = index;">
-        {{column.name | translate}}
-        <i *ngIf="column.direction === 'desc'" class="fe fe-chevron-down"></i>
-        <i *ngIf="column.direction === 'asc'" class="fe fe-chevron-up"></i>
+        <div sortable="{{column.property}}" (sort)="onSort($event)">
+          {{column.name | translate}}
+          <i *ngIf="column.direction === 'desc'" class="fas fa-chevron-down"></i>
+          <i *ngIf="column.direction === 'asc'" class="fas fa-chevron-up"></i>
+        </div>
+        <div>
+          <input type="text" class="form-control form-control-sm" [formControlName]="column.property">
+        </div>
+
       </th>
       <th *ngIf="settings.rowActions"></th>
     </tr>
@@ -113,7 +118,6 @@
     </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
     </div>
     <ngb-pagination
-      #pagination
       [collectionSize]="tableData.length"
       [(page)]="page"
       [maxSize]="7"
@@ -121,4 +125,8 @@
       <ng-template ngbPaginationEllipsis>...</ng-template>
     </ngb-pagination>
   </div>
+</div>
+<div class="row">
+<div class="col-6"><pre>{{tableData | json}}</pre></div>
+<div class="col-6"><pre>{{originalTableData | json}}</pre></div>
 </div>

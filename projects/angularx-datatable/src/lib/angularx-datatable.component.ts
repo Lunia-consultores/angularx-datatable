@@ -2,12 +2,12 @@ import {Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@ang
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'lib-angularx-datatable',
   templateUrl: 'angularx-datatable.component.html',
-  styles: [
-  ]
+  styles: []
 })
 export class AngularxDatatableComponent implements OnInit {
 
@@ -26,6 +26,7 @@ export class AngularxDatatableComponent implements OnInit {
   set data(val) {
     if (val) {
       this.originalTableData = val;
+      this.tableData = val;
       if (this.sortColumn === '') {
         this.sortColumn = this.settings.columns[0].property;
       }
@@ -33,7 +34,6 @@ export class AngularxDatatableComponent implements OnInit {
 
       this.setColumnsAsVisible();
       this.hideCheckboxes();
-      this.checkSelectAll();
     }
 
   }
@@ -42,13 +42,15 @@ export class AngularxDatatableComponent implements OnInit {
   @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   public page = 1;
   public pageSize = 15;
-  public selectAllCheck = false;
+  public searchForm: FormGroup;
 
-  constructor(public sanitized: DomSanitizer) {
-    console.log(this.settings);
+  constructor(public sanitized: DomSanitizer,
+              private formBuilder: FormBuilder) {
   }
 
   public ngOnInit(): void {
+    this.setSearchForm();
+
   }
 
   public ocultarColumna(property: string): boolean {
@@ -66,16 +68,15 @@ export class AngularxDatatableComponent implements OnInit {
       this.settings.someSelectedRows = true;
     } else {
       this.settings.someSelectedRows = false;
-
     }
 
     if (columnsChecked.length === this.tableData.length) {
-      this.selectAllCheck = true;
+      this.searchForm.patchValue({checkSelectAll: true});
     } else {
-      this.selectAllCheck = false;
+      this.searchForm.patchValue({checkSelectAll: false});
     }
     if (columnsChecked.length === 0) {
-      this.selectAllCheck = false;
+      this.searchForm.patchValue({checkSelectAll: false});
     }
   }
 
@@ -93,6 +94,7 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   public onSort({column, direction}: SortEvent): void {
+    this.applyFilters();
     this.headers.forEach(header => {
       if (header.sortable !== column) {
         header.direction = '';
@@ -110,7 +112,7 @@ export class AngularxDatatableComponent implements OnInit {
     this.sortColumn = column;
     if (this.sortDirection === '') {
       this.setColumnDirection();
-      return this.originalTableData;
+      return this.tableData;
     } else {
       this.setColumnDirection();
       return [...tableData].sort((a, b) => {
@@ -118,6 +120,12 @@ export class AngularxDatatableComponent implements OnInit {
         return direction === 'asc' ? res : -res;
       });
     }
+  }
+
+  private resetSort(): void {
+    this.settings.columns.forEach( column => {
+      column.direction = '';
+    });
   }
 
   private setColumnDirection(): void {
@@ -203,5 +211,30 @@ export class AngularxDatatableComponent implements OnInit {
     } else {
       return () => true;
     }
+  }
+
+  private setSearchForm(): void {
+    this.searchForm = this.formBuilder.group({ checkSelectAll: false });
+    this.settings.columns.forEach(column => {
+      this.searchForm.addControl(column.property, this.formBuilder.control(null));
+    });
+
+    this.searchForm.valueChanges.subscribe((value) => {
+      this.applyFilters();
+    });
+  }
+
+  public applyFilters(): void {
+    const filterValue = this.searchForm.value;
+    this.tableData = this.originalTableData;
+
+    this.settings.columns.forEach( column => {
+      if (filterValue[column.property]) {
+        this.tableData = this.tableData.filter(x => {
+          return (x[column.property].toLowerCase().includes(filterValue[column.property].toLowerCase()));
+        });
+      }
+    });
+    this.resetSort();
   }
 }

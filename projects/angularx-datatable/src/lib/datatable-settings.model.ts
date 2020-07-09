@@ -10,6 +10,7 @@ export interface DatatableSettings {
   rowClick?: any;
   tableActions?: any[];
   someSelectedRows?: boolean;
+  enableColumnFilters?: boolean;
 }
 
 export interface ColumnSettings {

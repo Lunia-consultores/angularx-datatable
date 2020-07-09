@@ -48,6 +48,7 @@ export class AppComponent implements OnInit{
     pageSize: 10,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
+    enableColumnFilters: true
   };
 
   ngOnInit(): void {
@@ -66,6 +67,21 @@ export class AppComponent implements OnInit{
         id: 3,
         nombre: 'Jose',
         apellidos: 'García'
+      },
+      {
+        id: 4,
+        nombre: 'Tomi',
+        apellidos: 'Picha'
+      },
+      {
+        id: 5,
+        nombre: 'Black',
+        apellidos: 'Coronel'
+      },
+      {
+        id: 6,
+        nombre: 'Juanfra',
+        apellidos: 'Sanchez Aldeguer'
       }
     ];
 
