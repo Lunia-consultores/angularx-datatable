@@ -6,7 +6,7 @@ import {DatatableSettings} from '../../projects/angularx-datatable/src/lib/datat
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   public title = 'datable';
   public data;
   public tableSettings: DatatableSettings = {
@@ -21,14 +21,11 @@ export class AppComponent implements OnInit{
         property: 'apellidos',
       },
       {
-        name: 'Movida custom',
-        property: '',
+        name: 'Telefono',
+        property: 'telefono',
         type: 'custom',
-        callback: (row) => {
-          alert('oleeeee' + row.id);
-        },
         customContent: (row) => {
-          return `<div>${'mu rico' + row.id}</div>`;
+          return `<span>${row.telefono}</span>`;
         }
       }
     ],
@@ -67,32 +64,43 @@ export class AppComponent implements OnInit{
       {
         id: 1,
         nombre: 'Miguel',
-        apellidos: 'Cerezuela'
+        apellidos: 'Cerezuela',
+        telefono: '634033415',
       },
       {
         id: 2,
         nombre: 'Jaime',
-        apellidos: 'Molero'
+        apellidos: 'Molero',
+        telefono: '968553568',
+
       },
       {
         id: 3,
         nombre: 'Jose',
-        apellidos: 'García'
+        apellidos: 'García',
+        telefono: '968554422',
+
       },
       {
         id: 4,
         nombre: 'Tomi',
-        apellidos: 'Picha'
+        apellidos: 'Picha',
+        telefono: '658993355',
+
       },
       {
         id: 5,
         nombre: 'Black',
-        apellidos: null
+        apellidos: null,
+        telefono: '587412356',
+
       },
       {
         id: 6,
         nombre: 'Juanfra',
-        apellidos: 'Sanchez Aldeguer'
+        apellidos: 'Sanchez Aldeguer',
+        telefono: '699858784',
+
       }
     ];
 

@@ -231,8 +231,7 @@ export class AngularxDatatableComponent implements OnInit {
     this.settings.columns.forEach( column => {
       if (filterValue[column.property]) {
         this.tableData = this.tableData.filter(x => {
-
-          return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+            return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
         });
       }
     });
