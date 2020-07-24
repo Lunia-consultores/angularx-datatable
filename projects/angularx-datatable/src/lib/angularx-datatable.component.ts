@@ -174,12 +174,8 @@ export class AngularxDatatableComponent implements OnInit {
 
   public getRowClass(row): string {
     let classes = '';
-    if (this.settings.rowStyles) {
-      for (const rowStyle of this.settings.rowStyles) {
-        if (rowStyle.callback(row)) {
-          classes = classes + ' ' + rowStyle.classes;
-        }
-      }
+    if (this.settings.rowsStyles) {
+      classes = this.settings.rowsStyles.callback(row);
       return classes;
     }
     return '';

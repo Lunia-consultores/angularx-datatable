@@ -1,14 +1,15 @@
+
 export interface DatatableSettings {
   title?: string;
   classes?: string;
   pageSize: number;
   columns: ColumnSettings[];
-  rowStyles?: RowStyle[];
+  rowsStyles?: RowsStyles;
   showchecksColumn: boolean;
   columnCheckExceptions?: any[];
   rowActions?: any[];
   rowClick?: any;
-  tableActions?: any[];
+  tableActions?: TableActions[];
   someSelectedRows?: boolean;
   enableColumnFilters?: boolean;
 }
@@ -28,9 +29,7 @@ export interface ColumnSettings {
   customContent?: any;
 }
 
-export interface RowStyle {
-  classes: string;
-  dataField: string;
+export interface RowsStyles {
   callback: any;
 }
 
@@ -38,4 +37,12 @@ export interface IconCase {
   id: number;
   class: string;
   icon: string;
+}
+
+export interface TableActions {
+  name: string;
+  visible?: boolean;
+  classes: string;
+  icon: string;
+  callback: any;
 }

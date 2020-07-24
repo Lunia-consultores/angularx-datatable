@@ -53,6 +53,13 @@ export class AppComponent implements OnInit {
         },
       },
     ],
+    rowsStyles:
+      {
+        callback: (row) => {
+              return 'table-danger';
+        }
+      }
+    ,
     pageSize: 10,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
@@ -75,7 +82,7 @@ export class AppComponent implements OnInit {
 
       },
       {
-        id: 3,
+        id: 1,
         nombre: 'Jose',
         apellidos: 'García',
         telefono: '968554422',
