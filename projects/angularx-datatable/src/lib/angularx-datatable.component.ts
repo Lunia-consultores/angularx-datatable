@@ -34,6 +34,9 @@ export class AngularxDatatableComponent implements OnInit {
 
       this.setColumnsAsVisible();
       this.hideCheckboxes();
+      if (this.searchForm) {
+        this.applyFilters();
+      }
     }
 
   }
