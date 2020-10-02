@@ -63,7 +63,7 @@
     </thead>
     <tbody #table>
     <tr (click)="rowClick(row)"
-        *ngFor="let row of tableData | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let index = index;"
+        *ngFor="let row of tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize; let index = index;"
         [class]="getRowClass(row)">
       <td *ngIf="settings.showchecksColumn">
         <div class="custom-control custom-checkbox">
@@ -112,19 +112,19 @@
 
   <div class="d-flex justify-content-between p-2">
     <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
-      <span *ngIf="tableData.length >= pageSize">
+      <span *ngIf="tableData.length >= settings.pageSize">
         <span
-          *ngIf="page >= (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{tableData.length % pageSize}}</span>
-        <span *ngIf="page < (tableData.length/pageSize + (tableData.length%pageSize)/10)">{{pageSize}}</span>
+          *ngIf="page >= (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{tableData.length % settings.pageSize}}</span>
+        <span *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
       </span>
-      <span *ngIf="pageSize > tableData.length">{{tableData.length}}</span>
+      <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
     </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
     </div>
     <ngb-pagination
       [collectionSize]="tableData.length"
       [(page)]="page"
       [maxSize]="7"
-      [pageSize]="pageSize">
+      [pageSize]="settings.pageSize">
       <ng-template ngbPaginationEllipsis>...</ng-template>
     </ngb-pagination>
   </div>

@@ -44,7 +44,6 @@ export class AngularxDatatableComponent implements OnInit {
   public uuid = this.uuidv4();
   @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   public page = 1;
-  public pageSize = 15;
   public searchForm: FormGroup;
 
   constructor(public sanitized: DomSanitizer,
