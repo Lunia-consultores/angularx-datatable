@@ -26,7 +26,9 @@ export class AngularxDatatableComponent implements OnInit {
   set data(val) {
     if (val) {
       this.originalTableData = val;
+      let checkedRows = this.getCheckedRows();
       this.tableData = val;
+      this.checkOriginalTableRows(checkedRows);
       if (this.sortColumn === '') {
         this.sortColumn = this.settings.columns[0].property;
       }
@@ -234,5 +236,26 @@ export class AngularxDatatableComponent implements OnInit {
       }
     });
     this.resetSort();
+  }
+
+  private getCheckedRows(): any[] {
+   return this.tableData.filter(row => row.checked === true);
+  }
+
+  private checkOriginalTableRows(originalcheckedRows: any[]) {
+    this.tableData.forEach(tableDataRow => {
+      originalcheckedRows.forEach( row => {
+        if (tableDataRow[this.getUniqueId()] === row[this.getUniqueId()]) {
+          tableDataRow.checked = true;
+        }
+      })
+    });
+  }
+
+  private getUniqueId(): any {
+    if (this.settings.rowUniqueId === undefined) {
+      return 'id';
+    }
+    return this.settings.rowUniqueId;
   }
 }

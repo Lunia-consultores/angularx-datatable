@@ -1,5 +1,6 @@
 
 export interface DatatableSettings {
+  rowUniqueId?: any;
   title?: string;
   classes?: string;
   pageSize: number;
