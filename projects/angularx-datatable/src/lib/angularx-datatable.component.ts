@@ -2,13 +2,14 @@ import {Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@ang
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'lib-angularx-datatable',
   templateUrl: 'angularx-datatable.component.html',
   styles: []
 })
+
 export class AngularxDatatableComponent implements OnInit {
 
   @Input() settings: DatatableSettings;
@@ -26,7 +27,7 @@ export class AngularxDatatableComponent implements OnInit {
   set data(val) {
     if (val) {
       this.originalTableData = val;
-      let checkedRows = this.getCheckedRows();
+      const checkedRows = this.getCheckedRows();
       this.tableData = val;
       this.checkOriginalTableRows(checkedRows);
       if (this.sortColumn === '') {
@@ -36,9 +37,11 @@ export class AngularxDatatableComponent implements OnInit {
 
       this.setColumnsAsVisible();
       this.hideCheckboxes();
-      if (this.searchForm) {
+
+      if (this.searchForm && this.hayFiltros()) {
         this.applyFilters();
       }
+
     }
 
   }
@@ -127,7 +130,7 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   private resetSort(): void {
-    this.settings.columns.forEach( column => {
+    this.settings.columns.forEach(column => {
       column.direction = '';
     });
   }
@@ -214,7 +217,7 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   private setSearchForm(): void {
-    this.searchForm = this.formBuilder.group({ checkSelectAll: false });
+    this.searchForm = this.formBuilder.group({checkSelectAll: false});
     this.settings.columns.forEach(column => {
       this.searchForm.addControl(column.property, this.formBuilder.control(null));
     });
@@ -224,31 +227,42 @@ export class AngularxDatatableComponent implements OnInit {
     });
   }
 
+  public hayFiltros(): boolean {
+    let hayFiltros = false;
+    this.settings.columns.forEach(column => {
+      if (this.searchForm.get(column.property).value && this.searchForm.get(column.property).value !== '') {
+        hayFiltros = true;
+      }
+    });
+    return hayFiltros;
+  }
+
   public applyFilters(): void {
     const filterValue = this.searchForm.value;
     this.tableData = this.originalTableData;
-
-    this.settings.columns.forEach( column => {
+    this.settings.columns.forEach(column => {
       if (filterValue[column.property]) {
         this.tableData = this.tableData.filter(x => {
-            return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+          return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
         });
       }
     });
-    this.resetSort();
+
+    this.tableData = this.sort(this.tableData, this.sortColumn, this.sortDirection);
+
   }
 
   private getCheckedRows(): any[] {
-   return this.tableData.filter(row => row.checked === true);
+    return this.tableData.filter(row => row.checked === true);
   }
 
   private checkOriginalTableRows(originalcheckedRows: any[]) {
     this.tableData.forEach(tableDataRow => {
-      originalcheckedRows.forEach( row => {
+      originalcheckedRows.forEach(row => {
         if (tableDataRow[this.getUniqueId()] === row[this.getUniqueId()]) {
           tableDataRow.checked = true;
         }
-      })
+      });
     });
   }
 
