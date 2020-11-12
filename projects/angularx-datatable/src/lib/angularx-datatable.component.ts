@@ -41,7 +41,7 @@ export class AngularxDatatableComponent implements OnInit {
       if (this.searchForm && this.hayFiltros()) {
         this.applyFilters();
       }
-
+      this.sortHiddenColumns();
     }
 
   }
@@ -108,6 +108,7 @@ export class AngularxDatatableComponent implements OnInit {
       }
     });
     this.tableData = this.sort(this.tableData, column, direction);
+    this.sortHiddenColumns();
   }
 
   private compare(v1, v2): number {
@@ -127,6 +128,12 @@ export class AngularxDatatableComponent implements OnInit {
         return direction === 'asc' ? res : -res;
       });
     }
+  }
+
+  private sortHiddenColumns(): void {
+    this.settings.hiddenSortColumns.forEach( (column) => {
+      this.tableData = this.sort(this.tableData, column.name, column.direction);
+    });
   }
 
   private resetSort(): void {
@@ -252,11 +259,13 @@ export class AngularxDatatableComponent implements OnInit {
 
   }
 
+
+
   private getCheckedRows(): any[] {
     return this.tableData.filter(row => row.checked === true);
   }
 
-  private checkOriginalTableRows(originalcheckedRows: any[]) {
+  private checkOriginalTableRows(originalcheckedRows: any[]): void {
     this.tableData.forEach(tableDataRow => {
       originalcheckedRows.forEach(row => {
         if (tableDataRow[this.getUniqueId()] === row[this.getUniqueId()]) {

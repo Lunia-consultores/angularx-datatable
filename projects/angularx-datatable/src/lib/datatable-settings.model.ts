@@ -1,4 +1,5 @@
 
+
 export interface DatatableSettings {
   rowUniqueId?: any;
   title?: string;
@@ -13,6 +14,7 @@ export interface DatatableSettings {
   tableActions?: TableActions[];
   someSelectedRows?: boolean;
   enableColumnFilters?: boolean;
+  hiddenSortColumns?: HiddenSortColumn[];
 }
 
 export interface ColumnSettings {
@@ -46,4 +48,9 @@ export interface TableActions {
   classes: string;
   icon: string;
   callback: any;
+}
+
+export interface HiddenSortColumn {
+  name: string;
+  direction: string;
 }
