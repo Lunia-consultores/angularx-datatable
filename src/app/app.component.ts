@@ -62,10 +62,11 @@ export class AppComponent implements OnInit {
         }
       }
     ,
-    pageSize: 15,
+    pageSize: 2,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     enableColumnFilters: true,
+    usePagination: false
 
   };
 

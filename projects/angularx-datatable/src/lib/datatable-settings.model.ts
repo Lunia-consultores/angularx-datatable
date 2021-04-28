@@ -15,6 +15,7 @@ export interface DatatableSettings {
   someSelectedRows?: boolean;
   enableColumnFilters?: boolean;
   hiddenSortColumns?: HiddenSortColumn[];
+  usePagination: boolean;
 }
 
 export interface ColumnSettings {

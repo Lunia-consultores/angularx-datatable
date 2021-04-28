@@ -63,7 +63,7 @@
     </thead>
     <tbody #table>
     <tr (click)="rowClick(row)"
-        *ngFor="let row of tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize; let index = index;"
+        *ngFor="let row of settings.usePagination ? (tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize) : tableData; let index = index;"
         [class]="getRowClass(row)">
       <td *ngIf="settings.showchecksColumn">
         <div class="custom-control custom-checkbox">
@@ -110,7 +110,7 @@
     </tbody>
   </table>
 
-  <div class="d-flex justify-content-between p-2">
+  <div class="d-flex justify-content-between p-2" *ngIf="settings.usePagination">
     <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
       <span *ngIf="tableData.length >= settings.pageSize">
         <span
