@@ -17,10 +17,7 @@ export class AppComponent implements OnInit {
         name: 'Nombre',
         property: 'nombre',
       },
-      {
-        name: 'Lerdo',
-        property: 'is_lerdo',
-      },
+
       {
         name: 'Apellidos',
         property: 'apellidos',
@@ -69,12 +66,7 @@ export class AppComponent implements OnInit {
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     enableColumnFilters: true,
-    hiddenSortColumns: [
-      {
-        name: 'is_lerdo',
-        direction: 'asc'
-      }
-    ]
+
   };
 
 

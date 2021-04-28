@@ -131,9 +131,12 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   private sortHiddenColumns(): void {
-    this.settings.hiddenSortColumns.forEach( (column) => {
-      this.tableData = this.sort(this.tableData, column.name, column.direction);
-    });
+    if (this.settings.hiddenSortColumns) {
+      this.settings.hiddenSortColumns.forEach( (column) => {
+        this.tableData = this.sort(this.tableData, column.name, column.direction);
+      });
+    }
+
   }
 
   private resetSort(): void {
@@ -142,9 +145,12 @@ export class AngularxDatatableComponent implements OnInit {
     });
   }
 
+
   private setColumnDirection(): void {
     const column = this.getColumnByProperty(this.sortColumn);
-    column.direction = this.sortDirection;
+    if (column) {
+      column.direction = this.sortDirection;
+    }
   }
 
   public getColumnByProperty(property: string): ColumnSettings {
