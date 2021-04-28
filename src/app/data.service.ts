@@ -15,6 +15,7 @@ export class DataService {
         apellidos: 'Cerezuela',
         is_lerdo: true,
         telefono: '634033415',
+        numero_linea: 6,
       },
       {
         id: 2,
@@ -22,6 +23,7 @@ export class DataService {
         apellidos: 'Molero',
          is_lerdo: false,
         telefono: '968553568',
+        numero_linea: 1,
 
       },
       {
@@ -30,6 +32,7 @@ export class DataService {
         apellidos: 'García',
          is_lerdo: true,
         telefono: '968554422',
+        numero_linea: 2,
 
       },
       {
@@ -38,6 +41,7 @@ export class DataService {
         apellidos: 'Picha',
          is_lerdo: false,
         telefono: '658993355',
+        numero_linea: 3,
 
       },
       {
@@ -46,6 +50,7 @@ export class DataService {
         apellidos: null,
          is_lerdo: true,
         telefono: '587412356',
+        numero_linea: 4,
 
       },
       {
@@ -54,6 +59,7 @@ export class DataService {
         apellidos: 'Sanchez Aldeguer',
         is_lerdo: false,
         telefono: '699858784',
+        numero_linea: 5,
 
       }
     ];

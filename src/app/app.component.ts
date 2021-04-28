@@ -14,10 +14,13 @@ export class AppComponent implements OnInit {
     title: '',
     columns: [
       {
+        name: 'Línea',
+        property: 'numero_linea',
+      },
+      {
         name: 'Nombre',
         property: 'nombre',
       },
-
       {
         name: 'Apellidos',
         property: 'apellidos',
@@ -66,8 +69,11 @@ export class AppComponent implements OnInit {
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     enableColumnFilters: true,
-    usePagination: false
-
+    usePagination: false,
+    defaultShortColumn: {
+      property: 'numero_linea',
+      direction: 'asc'
+    }
   };
 
 

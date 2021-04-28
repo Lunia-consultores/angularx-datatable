@@ -14,8 +14,10 @@ export interface DatatableSettings {
   tableActions?: TableActions[];
   someSelectedRows?: boolean;
   enableColumnFilters?: boolean;
-  hiddenSortColumns?: HiddenSortColumn[];
+  hiddenSortColumns?: SortColumn[];
   usePagination: boolean;
+  defaultSortColumnIndex?: number;
+  defaultShortColumn?: SortColumn;
 }
 
 export interface ColumnSettings {
@@ -51,7 +53,7 @@ export interface TableActions {
   callback: any;
 }
 
-export interface HiddenSortColumn {
-  name: string;
+export interface SortColumn {
+  property: string;
   direction: string;
 }

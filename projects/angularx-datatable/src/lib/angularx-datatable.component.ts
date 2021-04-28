@@ -42,6 +42,7 @@ export class AngularxDatatableComponent implements OnInit {
         this.applyFilters();
       }
       this.sortHiddenColumns();
+      this.sortByDefaultShortColumnProperty();
     }
 
   }
@@ -133,10 +134,15 @@ export class AngularxDatatableComponent implements OnInit {
   private sortHiddenColumns(): void {
     if (this.settings.hiddenSortColumns) {
       this.settings.hiddenSortColumns.forEach( (column) => {
-        this.tableData = this.sort(this.tableData, column.name, column.direction);
+        this.tableData = this.sort(this.tableData, column.property, column.direction);
       });
     }
+  }
 
+  private sortByDefaultShortColumnProperty(): void {
+    if (this.settings.defaultShortColumn) {
+      this.tableData = this.sort(this.tableData, this.settings.defaultShortColumn.property, 'asc');
+    }
   }
 
   private resetSort(): void {
