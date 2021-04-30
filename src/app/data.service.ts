@@ -20,7 +20,7 @@ export class DataService {
       {
         id: 2,
         nombre: 'Jaime',
-        apellidos: 'Molero',
+        apellidos: 'Cerezuela',
          is_lerdo: false,
         telefono: '968553568',
         numero_linea: 1,
@@ -38,7 +38,7 @@ export class DataService {
       {
         id: 4,
         nombre: 'Tomi',
-        apellidos: 'Picha',
+        apellidos: 'Cerezuela',
          is_lerdo: false,
         telefono: '658993355',
         numero_linea: 3,
@@ -47,7 +47,7 @@ export class DataService {
       {
         id: 5,
         nombre: 'Black',
-        apellidos: null,
+        apellidos: 'Cerezuela',
          is_lerdo: true,
         telefono: '587412356',
         numero_linea: 4,
@@ -56,7 +56,7 @@ export class DataService {
       {
         id: 6,
         nombre: 'Juanfra',
-        apellidos: 'Sanchez Aldeguer',
+        apellidos: 'García',
         is_lerdo: false,
         telefono: '699858784',
         numero_linea: 5,

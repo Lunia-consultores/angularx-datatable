@@ -1,0 +1,23 @@
+.asc > .up-icon {
+  display: inline-block;
+}
+
+.desc > .down-icon {
+  display: inline-block;
+}
+
+.desc > .up-icon {
+  display: none;
+}
+
+.asc > .down-icon {
+  display: none;
+}
+
+.down-icon{
+  display: none;
+}
+
+.up-icon {
+  display: none;
+}

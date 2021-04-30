@@ -23,7 +23,17 @@ export class NgbdSortableHeaderDirective {
   @Output() sort = new EventEmitter<SortEvent>();
 
   rotate(): void {
+    console.log('rotate');
     this.direction = rotate[this.direction];
     this.sort.emit({column: this.sortable, direction: this.direction});
+  }
+
+  public updateStatus(direccion: string): void {
+    this.direction = direccion as SortDirection;
+    this.sort.emit({column: this.sortable, direction: this.direction});
+  }
+
+  public reset(): void {
+    this.direction = '';
   }
 }

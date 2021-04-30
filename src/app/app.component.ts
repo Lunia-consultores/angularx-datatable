@@ -70,10 +70,11 @@ export class AppComponent implements OnInit {
     showchecksColumn: true,
     enableColumnFilters: true,
     usePagination: false,
-    defaultShortColumn: {
-      property: 'numero_linea',
-      direction: 'asc'
-    }
+    saveTAbleStatus: true
+    // defaultShortColumn: {
+    //   property: 'numero_linea',
+    //   direction: 'asc'
+    // }
   };
 
 

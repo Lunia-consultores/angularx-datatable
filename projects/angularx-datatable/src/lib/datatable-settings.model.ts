@@ -18,6 +18,7 @@ export interface DatatableSettings {
   usePagination: boolean;
   defaultSortColumnIndex?: number;
   defaultShortColumn?: SortColumn;
+  saveTAbleStatus: boolean;
 }
 
 export interface ColumnSettings {

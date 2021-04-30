@@ -23,7 +23,7 @@
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="p-2">
             <div *ngFor="let column of settings.columns; let index = index;">
               <div class="custom-control custom-checkbox">
-                <input [(ngModel)]="column.show" type="checkbox" class="custom-control-input"
+                <input (ngModelChange)="showColumnChange($event, column.property)" [(ngModel)]="column.show" type="checkbox" class="custom-control-input"
                        id="{{'col-visibility-' + index + uuid}}" name="sdssds">
                 <label class="custom-control-label"
                        for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
@@ -50,13 +50,12 @@
           *ngFor="let column of settings.columns; let index = index;">
         <div sortable="{{column.property}}" (sort)="onSort($event)">
           {{column.name | translate}}
-          <i *ngIf="column.direction === 'desc'" class="fas fa-chevron-down"></i>
-          <i *ngIf="column.direction === 'asc'" class="fas fa-chevron-up"></i>
+          <i class="fas fa-chevron-down down-icon"></i>
+          <i class="fas fa-chevron-up up-icon"></i>
         </div>
         <div *ngIf="settings.enableColumnFilters">
           <input type="text" class="form-control form-control-sm" [formControlName]="column.property">
         </div>
-
       </th>
       <th *ngIf="settings.rowActions"></th>
     </tr>
