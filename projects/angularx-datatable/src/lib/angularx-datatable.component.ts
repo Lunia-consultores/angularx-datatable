@@ -49,11 +49,11 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       this.hideCheckboxes();
 
       if (this.searchForm && this.hayFiltros()) {
-        // this.applyFilters();
+        this.applyFilters();
       }
-      // this.sortHiddenColumns();
-      // this.sortByDefaultShortColumnProperty();
-
+      this.sortHiddenColumns();
+      this.sortByDefaultShortColumnProperty();
+      this.initColumnVisivility();
 
     }
   }
@@ -68,8 +68,8 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    if (!this.getTableConfig()) {
-      this.createTableConfig();
+    if (!this.saveTableConfiguration.getTableConfig()) {
+      this.saveTableConfiguration.createTableConfig();
     }
     this.setSearchForm();
   }
@@ -132,7 +132,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     if (this.headers) {
       this.resetSort();
     }
-    this.saveTableStatus(column, direction);
+    this.saveTableConfiguration.saveTableSortStatus(column, direction);
     if (direction === '') {
       this.tableData = this.originalTableData;
       return this.tableData;
@@ -303,32 +303,8 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     return this.settings.rowUniqueId;
   }
 
-  private saveTableStatus(columna, direccion): void {
-    const tableStatus = this.getSortConfig();
-    tableStatus.sort = {column: columna, direction: direccion};
-    localStorage.setItem('table', JSON.stringify(tableStatus));
-  }
-
-  private getSortConfig(): TableStatus {
-    const tableConfig = JSON.parse(localStorage.getItem('table'));
-    if (tableConfig) {
-      return tableConfig;
-    } else {
-      return {} as TableStatus;
-    }
-  }
-
-  private getColumnsVisibilityConfig(): ColumnVisibility[] {
-    const tableConfig = JSON.parse(localStorage.getItem('table'));
-    if (tableConfig.table_visibility) {
-      return tableConfig.table_visibility;
-    } else {
-      return [] as ColumnVisibility[];
-    }
-  }
-
   private applySavedSort(): void {
-    const sortConfig = this.getSortConfig();
+    const sortConfig = this.saveTableConfiguration.getSortConfig();
     this.headers.forEach(header => {
       if (sortConfig.sort && sortConfig.sort.column === header.sortable) {
         header.updateStatus(sortConfig.sort.direction);
@@ -337,14 +313,12 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public showColumnChange($event: any, columnProperty: string): void {
-    console.log($event);
-    const tableConfig = this.getTableConfig();
+    const tableConfig = this.saveTableConfiguration.getTableConfig();
     const columnasNovisibles = [];
 
     this.getNoVisibleColumns().forEach(noVIsible => {
       if (noVIsible.property !== columnProperty) {
         columnasNovisibles.push({property: noVIsible.property});
-
       }
     });
     if (!$event) {
@@ -353,22 +327,19 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     }
     tableConfig.columns_visibility = columnasNovisibles;
     localStorage.setItem('table', JSON.stringify( tableConfig));
-    console.log(tableConfig);
+  }
+
+
+
+  private initColumnVisivility(): void {
+    const columns = this.saveTableConfiguration.getTableConfig().columns_visibility;
+    columns.forEach(column => {
+      const columnSettings = this.settings.columns.find(columna => columna.property === column.property);
+      columnSettings.show = false;
+    });
   }
 
   public getNoVisibleColumns(): any {
     return this.settings.columns.filter(column => !column.show);
-  }
-
-  private getTableConfig(): TableStatus {
-    const tableCOnfig = JSON.parse(localStorage.getItem('table'));
-    return tableCOnfig;
-  }
-
-  private createTableConfig(): void {
-    localStorage.setItem('table', JSON.stringify({
-      sort: [],
-      columns_visibility: []
-    } as TableStatus));
   }
 }
