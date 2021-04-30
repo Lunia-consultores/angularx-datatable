@@ -12,6 +12,8 @@ export class AppComponent implements OnInit {
   public data;
   public tableSettings: DatatableSettings = {
     title: '',
+    table_uuid: 'tabla_app_component',
+    enable_save_conf: true,
     columns: [
       {
         name: 'Línea',

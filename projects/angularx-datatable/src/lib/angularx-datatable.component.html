@@ -15,6 +15,11 @@
                   class="{{tableAction.classes}}"><i class="{{tableAction.icon}}"></i> {{tableAction.name | translate}}
           </button>
         </ng-container>
+        <button *ngIf="settings.enable_save_conf"
+                class="btn btn-link text-dark"
+                (click)="resetTableSavedConfig()">
+          <i class="fas fa-redo-alt"></i> {{'Reset configuracion' | translate}}
+        </button>
       </div>
       <div>
         <div ngbDropdown [placement]="'bottom-right'" class="d-inline-block">
@@ -23,7 +28,8 @@
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="p-2">
             <div *ngFor="let column of settings.columns; let index = index;">
               <div class="custom-control custom-checkbox">
-                <input (ngModelChange)="showColumnChange($event, column.property)" [(ngModel)]="column.show" type="checkbox" class="custom-control-input"
+                <input (ngModelChange)="showColumnChange($event, column.property)" [(ngModel)]="column.show"
+                       type="checkbox" class="custom-control-input"
                        id="{{'col-visibility-' + index + uuid}}" name="sdssds">
                 <label class="custom-control-label"
                        for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
@@ -114,7 +120,8 @@
       <span *ngIf="tableData.length >= settings.pageSize">
         <span
           *ngIf="page >= (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{tableData.length % settings.pageSize}}</span>
-        <span *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
+        <span
+          *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
       </span>
       <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
     </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.

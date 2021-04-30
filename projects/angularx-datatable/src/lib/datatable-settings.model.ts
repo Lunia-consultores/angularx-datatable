@@ -1,6 +1,6 @@
-
-
 export interface DatatableSettings {
+  table_uuid?: string;
+  enable_save_conf?: boolean;
   rowUniqueId?: any;
   title?: string;
   classes?: string;
