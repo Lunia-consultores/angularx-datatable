@@ -1,19 +1,26 @@
-import {Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {SaveTableConfigurationService} from './save-table-configuration.service';
+import {ColumnVisibility, TableStatus} from './table-status.model';
 
 @Component({
   selector: 'lib-angularx-datatable',
   templateUrl: 'angularx-datatable.component.html',
-  styles: []
+  styleUrls: ['angularx-datatable.component.scss']
 })
 
-export class AngularxDatatableComponent implements OnInit {
+export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   @Input() settings: DatatableSettings;
   @ViewChild('table', {static: false}) table;
+  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
+  public uuid = this.uuidv4();
+  public page = 1;
+  public searchForm: FormGroup;
+
   public tableData = [];
   public originalTableData = [];
   private sortDirection = '';
@@ -33,32 +40,38 @@ export class AngularxDatatableComponent implements OnInit {
       if (this.sortColumn === '') {
         this.sortColumn = this.settings.columns[0].property;
       }
-      this.tableData = this.sort(val, this.sortColumn, this.sortDirection);
+
+      if (!this.settings.saveTAbleStatus) {
+        this.tableData = this.sort(val, this.sortColumn, this.sortDirection);
+      }
 
       this.setColumnsAsVisible();
       this.hideCheckboxes();
 
       if (this.searchForm && this.hayFiltros()) {
-        this.applyFilters();
+        // this.applyFilters();
       }
-      this.sortHiddenColumns();
-      this.sortByDefaultShortColumnProperty();
-    }
+      // this.sortHiddenColumns();
+      // this.sortByDefaultShortColumnProperty();
 
+
+    }
   }
 
-  public uuid = this.uuidv4();
-  @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
-  public page = 1;
-  public searchForm: FormGroup;
-
   constructor(public sanitized: DomSanitizer,
+              public saveTableConfiguration: SaveTableConfigurationService,
               private formBuilder: FormBuilder) {
   }
 
-  public ngOnInit(): void {
-    this.setSearchForm();
+  public ngAfterViewInit(): void {
+    this.applySavedSort();
+  }
 
+  public ngOnInit(): void {
+    if (!this.getTableConfig()) {
+      this.createTableConfig();
+    }
+    this.setSearchForm();
   }
 
   public ocultarColumna(property: string): boolean {
@@ -102,11 +115,8 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   public onSort({column, direction}: SortEvent): void {
-    this.applyFilters();
+    // this.applyFilters();
     this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
     });
     this.tableData = this.sort(this.tableData, column, direction);
     this.sortHiddenColumns();
@@ -119,21 +129,24 @@ export class AngularxDatatableComponent implements OnInit {
   private sort(tableData: any[], column: string, direction: string): any[] {
     this.sortDirection = direction;
     this.sortColumn = column;
-    if (this.sortDirection === '') {
-      this.setColumnDirection();
-      return this.tableData;
-    } else {
-      this.setColumnDirection();
-      return [...tableData].sort((a, b) => {
-        const res = this.compare(a[this.sortColumn], b[this.sortColumn]);
-        return direction === 'asc' ? res : -res;
-      });
+    if (this.headers) {
+      this.resetSort();
     }
+    this.saveTableStatus(column, direction);
+    if (direction === '') {
+      this.tableData = this.originalTableData;
+      return this.tableData;
+    }
+    return [...this.tableData].sort((a, b) => {
+      const res = this.compare(a[column], b[column]);
+      return direction === 'asc' ? res : -res;
+    });
+
   }
 
   private sortHiddenColumns(): void {
     if (this.settings.hiddenSortColumns) {
-      this.settings.hiddenSortColumns.forEach( (column) => {
+      this.settings.hiddenSortColumns.forEach((column) => {
         this.tableData = this.sort(this.tableData, column.property, column.direction);
       });
     }
@@ -146,9 +159,13 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   private resetSort(): void {
-    this.settings.columns.forEach(column => {
-      column.direction = '';
+    this.headers.forEach(header => {
+      if (header.sortable !== this.sortColumn) {
+        header.reset();
+      }
     });
+    this.tableData = this.originalTableData;
+
   }
 
 
@@ -173,11 +190,7 @@ export class AngularxDatatableComponent implements OnInit {
   }
 
   public getCheckedRowsNumber(): number {
-
-    const selectedRowsNumber = this.tableData.filter(row => row.checked).length;
-
-
-    return selectedRowsNumber;
+    return this.tableData.filter(row => row.checked).length;
   }
 
   public getSelectedRows(): number[] {
@@ -266,12 +279,8 @@ export class AngularxDatatableComponent implements OnInit {
         });
       }
     });
-
     this.tableData = this.sort(this.tableData, this.sortColumn, this.sortDirection);
-
   }
-
-
 
   private getCheckedRows(): any[] {
     return this.tableData.filter(row => row.checked === true);
@@ -292,5 +301,74 @@ export class AngularxDatatableComponent implements OnInit {
       return 'id';
     }
     return this.settings.rowUniqueId;
+  }
+
+  private saveTableStatus(columna, direccion): void {
+    const tableStatus = this.getSortConfig();
+    tableStatus.sort = {column: columna, direction: direccion};
+    localStorage.setItem('table', JSON.stringify(tableStatus));
+  }
+
+  private getSortConfig(): TableStatus {
+    const tableConfig = JSON.parse(localStorage.getItem('table'));
+    if (tableConfig) {
+      return tableConfig;
+    } else {
+      return {} as TableStatus;
+    }
+  }
+
+  private getColumnsVisibilityConfig(): ColumnVisibility[] {
+    const tableConfig = JSON.parse(localStorage.getItem('table'));
+    if (tableConfig.table_visibility) {
+      return tableConfig.table_visibility;
+    } else {
+      return [] as ColumnVisibility[];
+    }
+  }
+
+  private applySavedSort(): void {
+    const sortConfig = this.getSortConfig();
+    this.headers.forEach(header => {
+      if (sortConfig.sort && sortConfig.sort.column === header.sortable) {
+        header.updateStatus(sortConfig.sort.direction);
+      }
+    });
+  }
+
+  public showColumnChange($event: any, columnProperty: string): void {
+    console.log($event);
+    const tableConfig = this.getTableConfig();
+    const columnasNovisibles = [];
+
+    this.getNoVisibleColumns().forEach(noVIsible => {
+      if (noVIsible.property !== columnProperty) {
+        columnasNovisibles.push({property: noVIsible.property});
+
+      }
+    });
+    if (!$event) {
+
+      columnasNovisibles.push({property: columnProperty});
+    }
+    tableConfig.columns_visibility = columnasNovisibles;
+    localStorage.setItem('table', JSON.stringify( tableConfig));
+    console.log(tableConfig);
+  }
+
+  public getNoVisibleColumns(): any {
+    return this.settings.columns.filter(column => !column.show);
+  }
+
+  private getTableConfig(): TableStatus {
+    const tableCOnfig = JSON.parse(localStorage.getItem('table'));
+    return tableCOnfig;
+  }
+
+  private createTableConfig(): void {
+    localStorage.setItem('table', JSON.stringify({
+      sort: [],
+      columns_visibility: []
+    } as TableStatus));
   }
 }
