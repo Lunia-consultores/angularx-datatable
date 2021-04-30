@@ -4,7 +4,6 @@ import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.dir
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
-import {ColumnVisibility, TableStatus} from './table-status.model';
 
 @Component({
   selector: 'lib-angularx-datatable',
@@ -41,21 +40,29 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
         this.sortColumn = this.settings.columns[0].property;
       }
 
-      if (!this.settings.saveTAbleStatus) {
-        this.tableData = this.sort(val, this.sortColumn, this.sortDirection);
+      if (!this.saveTableConfiguration.getTableConfig(this.settings.table_uuid)) {
+        this.saveTableConfiguration.createTableConfig(this.settings.table_uuid);
       }
 
-      this.setColumnsAsVisible();
-      this.hideCheckboxes();
-
-      if (this.searchForm && this.hayFiltros()) {
-        this.applyFilters();
-      }
-      this.sortHiddenColumns();
-      this.sortByDefaultShortColumnProperty();
-      this.initColumnVisivility();
+      this.applyTableSettings();
 
     }
+  }
+
+  private applyTableSettings(): void {
+    if (!this.settings.saveTAbleStatus) {
+      this.tableData = this.sort(this.originalTableData, this.sortColumn, this.sortDirection);
+    }
+
+    this.setColumnsAsVisible();
+    this.hideCheckboxes();
+
+    if (this.searchForm && this.hayFiltros()) {
+      this.applyFilters();
+    }
+    this.sortHiddenColumns();
+    this.sortByDefaultShortColumnProperty();
+    this.initColumnVisivility();
   }
 
   constructor(public sanitized: DomSanitizer,
@@ -68,9 +75,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    if (!this.saveTableConfiguration.getTableConfig(this.settings.table_uuid)) {
-      this.saveTableConfiguration.createTableConfig(this.settings.table_uuid);
-    }
+
     this.setSearchForm();
   }
 
@@ -165,15 +170,12 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       }
     });
     this.tableData = this.originalTableData;
-
   }
 
-
-  private setColumnDirection(): void {
-    const column = this.getColumnByProperty(this.sortColumn);
-    if (column) {
-      column.direction = this.sortDirection;
-    }
+  private resetColumnVisivility(): void {
+    this.settings.columns.forEach(column => {
+      column.show = true;
+    });
   }
 
   public getColumnByProperty(property: string): ColumnSettings {
@@ -337,5 +339,14 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   public getNoVisibleColumns(): any {
     return this.settings.columns.filter(column => !column.show);
+  }
+
+  public resetTableSavedConfig(): void {
+    this.saveTableConfiguration.clearConfig(this.settings.table_uuid);
+    this.tableData = this.originalTableData;
+    this.sortColumn = null;
+    this.resetSort();
+    this.applyTableSettings();
+    this.resetColumnVisivility();
   }
 }

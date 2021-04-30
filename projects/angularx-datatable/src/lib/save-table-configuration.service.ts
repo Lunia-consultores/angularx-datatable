@@ -39,4 +39,9 @@ export class SaveTableConfigurationService {
     tableStatus.columns_visibility = columnsVisivility;
     localStorage.setItem(tableUuid, JSON.stringify(tableStatus));
   }
+
+  public clearConfig(tableUuid: string): void {
+    localStorage.removeItem(tableUuid);
+    this.createTableConfig(tableUuid);
+  }
 }
