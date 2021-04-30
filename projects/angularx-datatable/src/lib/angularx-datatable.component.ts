@@ -68,8 +68,8 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    if (!this.saveTableConfiguration.getTableConfig()) {
-      this.saveTableConfiguration.createTableConfig();
+    if (!this.saveTableConfiguration.getTableConfig(this.settings.table_uuid)) {
+      this.saveTableConfiguration.createTableConfig(this.settings.table_uuid);
     }
     this.setSearchForm();
   }
@@ -132,7 +132,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     if (this.headers) {
       this.resetSort();
     }
-    this.saveTableConfiguration.saveTableSortStatus(column, direction);
+    this.saveTableConfiguration.saveTableSortStatus(this.settings.table_uuid, column, direction);
     if (direction === '') {
       this.tableData = this.originalTableData;
       return this.tableData;
@@ -304,7 +304,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   private applySavedSort(): void {
-    const sortConfig = this.saveTableConfiguration.getSortConfig();
+    const sortConfig = this.saveTableConfiguration.getSortConfig(this.settings.table_uuid);
     this.headers.forEach(header => {
       if (sortConfig.sort && sortConfig.sort.column === header.sortable) {
         header.updateStatus(sortConfig.sort.direction);
@@ -313,7 +313,6 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public showColumnChange($event: any, columnProperty: string): void {
-    const tableConfig = this.saveTableConfiguration.getTableConfig();
     const columnasNovisibles = [];
 
     this.getNoVisibleColumns().forEach(noVIsible => {
@@ -325,14 +324,11 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
       columnasNovisibles.push({property: columnProperty});
     }
-    tableConfig.columns_visibility = columnasNovisibles;
-    localStorage.setItem('table', JSON.stringify( tableConfig));
+    this.saveTableConfiguration.saveTableColumnVisibility(this.settings.table_uuid, columnasNovisibles);
   }
 
-
-
   private initColumnVisivility(): void {
-    const columns = this.saveTableConfiguration.getTableConfig().columns_visibility;
+    const columns = this.saveTableConfiguration.getTableConfig(this.settings.table_uuid).columns_visibility;
     columns.forEach(column => {
       const columnSettings = this.settings.columns.find(columna => columna.property === column.property);
       columnSettings.show = false;

@@ -8,19 +8,19 @@ export class SaveTableConfigurationService {
 
   constructor() { }
 
-  public getTableConfig(): TableStatus {
-    return JSON.parse(localStorage.getItem('table'));
+  public getTableConfig(tableUuid: string): TableStatus {
+    return JSON.parse(localStorage.getItem(tableUuid));
   }
 
-  public createTableConfig(): void {
-    localStorage.setItem('table', JSON.stringify({
+  public createTableConfig(tableUuid: string): void {
+    localStorage.setItem(tableUuid, JSON.stringify({
       sort: [],
       columns_visibility: []
     } as TableStatus));
   }
 
-  public getSortConfig(): TableStatus {
-    const tableConfig = JSON.parse(localStorage.getItem('table'));
+  public getSortConfig(tableUuid: string): TableStatus {
+    const tableConfig = JSON.parse(localStorage.getItem(tableUuid));
     if (tableConfig) {
       return tableConfig;
     } else {
@@ -28,10 +28,15 @@ export class SaveTableConfigurationService {
     }
   }
 
-  public saveTableSortStatus(columna, direccion): void {
-    const tableStatus = this.getSortConfig();
+  public saveTableSortStatus(tableUuid: string, columna, direccion): void {
+    const tableStatus = this.getSortConfig(tableUuid);
     tableStatus.sort = {column: columna, direction: direccion};
-    localStorage.setItem('table', JSON.stringify(tableStatus));
+    localStorage.setItem(tableUuid, JSON.stringify(tableStatus));
   }
 
+  public saveTableColumnVisibility(tableUuid: string, columnsVisivility): void {
+    const tableStatus = this.getSortConfig(tableUuid);
+    tableStatus.columns_visibility = columnsVisivility;
+    localStorage.setItem(tableUuid, JSON.stringify(tableStatus));
+  }
 }
