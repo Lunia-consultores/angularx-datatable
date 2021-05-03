@@ -1,4 +1,14 @@
-import {AfterViewChecked, AfterViewInit, Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -11,7 +21,7 @@ import {SaveTableConfigurationService} from './save-table-configuration.service'
   styleUrls: ['angularx-datatable.component.scss']
 })
 
-export class AngularxDatatableComponent implements OnInit, AfterViewChecked {
+export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   @Input() settings: DatatableSettings;
   @ViewChild('table', {static: false}) table;
@@ -67,7 +77,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewChecked {
               private formBuilder: FormBuilder) {
   }
 
-  public ngAfterViewChecked(): void {
+  public ngAfterViewInit(): void {
     setTimeout(() =>
       {
         this.applySavedSort();

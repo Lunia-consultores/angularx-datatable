@@ -17,11 +17,10 @@ export class NgbdSortableHeaderDirective {
   @Input() direction: SortDirection;
   @Output() sort = new EventEmitter<SortEvent>();
 
-  // @HostBinding('class.asc') get asc(): boolean {
-  //   console.log('dss');
-  //   return this.direction === 'asc';
-  // }
-  // @HostBinding('class.desc') get desc(): boolean { return this.direction === 'desc'; }
+  @HostBinding('class.asc') get asc(): boolean {
+    return this.direction === 'asc';
+  }
+  @HostBinding('class.desc') get desc(): boolean { return this.direction === 'desc'; }
 
   @HostListener('click', ['$event.target'])
   onClick(): void {
@@ -31,7 +30,6 @@ export class NgbdSortableHeaderDirective {
   }
 
   public rotate(): void {
-    console.log(this.elementRef);
     this.direction = rotate[this.direction];
     this.sort.emit({column: this.sortable, direction: this.direction});
   }

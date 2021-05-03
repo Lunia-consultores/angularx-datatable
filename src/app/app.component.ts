@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
     title: '',
     table_uuid: 'tabla_app_component',
     enable_save_conf: true,
+    enableColumnFilters: true,
     columns: [
       {
         name: 'Línea',
