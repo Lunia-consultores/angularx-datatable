@@ -1,4 +1,4 @@
-import {Directive, EventEmitter, Input, Output} from '@angular/core';
+import {AfterViewChecked, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
 
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: {[key: string]: SortDirection} = { asc: 'desc', desc: '', '': 'asc' };
@@ -10,20 +10,28 @@ export interface SortEvent {
 
 @Directive({
   selector: 'div[sortable]',
-  host: {
-    '[class.asc]': 'direction === "asc"',
-    '[class.desc]': 'direction === "desc"',
-    '(click)': 'rotate()'
-  }
+
 })
 export class NgbdSortableHeaderDirective {
-
   @Input() sortable: string;
-  @Input() direction: SortDirection = '';
+  @Input() direction: SortDirection;
   @Output() sort = new EventEmitter<SortEvent>();
 
-  rotate(): void {
-    console.log('rotate');
+  // @HostBinding('class.asc') get asc(): boolean {
+  //   console.log('dss');
+  //   return this.direction === 'asc';
+  // }
+  // @HostBinding('class.desc') get desc(): boolean { return this.direction === 'desc'; }
+
+  @HostListener('click', ['$event.target'])
+  onClick(): void {
+    this.rotate();
+  }
+  constructor(private elementRef: ElementRef) {
+  }
+
+  public rotate(): void {
+    console.log(this.elementRef);
     this.direction = rotate[this.direction];
     this.sort.emit({column: this.sortable, direction: this.direction});
   }
@@ -36,4 +44,5 @@ export class NgbdSortableHeaderDirective {
   public reset(): void {
     this.direction = '';
   }
+
 }

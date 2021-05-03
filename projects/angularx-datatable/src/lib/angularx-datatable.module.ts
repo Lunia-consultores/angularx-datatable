@@ -5,8 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgbdSortableHeaderDirective} from './ngbd-sortable-header.directive';
 import {CommonModule} from '@angular/common';
-
-
+import {SaveTableConfigurationService} from './save-table-configuration.service';
 
 @NgModule({
   declarations: [AngularxDatatableComponent, NgbdSortableHeaderDirective],
@@ -19,6 +18,9 @@ import {CommonModule} from '@angular/common';
     ReactiveFormsModule
 
   ],
-  exports: [AngularxDatatableComponent]
+  exports: [AngularxDatatableComponent],
+  providers: [
+    SaveTableConfigurationService
+  ]
 })
 export class AngularxDatatableModule { }

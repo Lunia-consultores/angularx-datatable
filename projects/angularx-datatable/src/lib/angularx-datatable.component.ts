@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -11,7 +11,7 @@ import {SaveTableConfigurationService} from './save-table-configuration.service'
   styleUrls: ['angularx-datatable.component.scss']
 })
 
-export class AngularxDatatableComponent implements OnInit, AfterViewInit {
+export class AngularxDatatableComponent implements OnInit, AfterViewChecked {
 
   @Input() settings: DatatableSettings;
   @ViewChild('table', {static: false}) table;
@@ -19,7 +19,6 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   public uuid = this.uuidv4();
   public page = 1;
   public searchForm: FormGroup;
-
   public tableData = [];
   public originalTableData = [];
   private sortDirection = '';
@@ -43,14 +42,12 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       if (!this.saveTableConfiguration.getTableConfig(this.settings.table_uuid)) {
         this.saveTableConfiguration.createTableConfig(this.settings.table_uuid);
       }
-
       this.applyTableSettings();
-
     }
   }
 
   private applyTableSettings(): void {
-    if (!this.settings.saveTAbleStatus) {
+    if (!this.settings.enable_save_conf) {
       this.tableData = this.sort(this.originalTableData, this.sortColumn, this.sortDirection);
     }
 
@@ -70,13 +67,18 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
               private formBuilder: FormBuilder) {
   }
 
-  public ngAfterViewInit(): void {
-    this.applySavedSort();
-  }
+  public ngAfterViewChecked(): void {
+    setTimeout(() =>
+      {
+        this.applySavedSort();
+      },
+      0);
+    }
 
   public ngOnInit(): void {
 
     this.setSearchForm();
+
   }
 
   public ocultarColumna(property: string): boolean {
