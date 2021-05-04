@@ -15,11 +15,14 @@ export class AppComponent implements OnInit {
     title: '',
     table_uuid: 'tabla_app_component',
     enable_save_conf: true,
+    showTotalRow: true,
     enableColumnFilters: false,
     columns: [
       {
         name: 'Línea',
         property: 'numero_linea',
+        totalize: true,
+        type: 'number'
       },
       {
         name: 'Nombre',
@@ -44,6 +47,15 @@ export class AppComponent implements OnInit {
         classes: 'btn-warning',
         callback: (row) => {
         },
+      },
+    ],
+    rowStyles: [
+      {
+        classes: 'table-danger',
+        dataField: 'nombre',
+        callback: (row) => {
+          return row.nombre === 'Miguel';
+        }
       },
     ],
     tableActions: [

@@ -10,10 +10,12 @@ export interface DatatableSettings {
   showchecksColumn: boolean;
   columnCheckExceptions?: any[];
   rowActions?: any[];
+  rowStyles?: RowStyle[];
   rowClick?: any;
   tableActions?: TableActions[];
   someSelectedRows?: boolean;
   enableColumnFilters?: boolean;
+  showTotalRow?: boolean;
   hiddenSortColumns?: SortColumn[];
   usePagination: boolean;
   defaultSortColumnIndex?: number;
@@ -25,8 +27,9 @@ export interface ColumnSettings {
   name: string;
   classes?: string;
   property: string;
-  type?: 'currency' | 'icon' | 'date' | 'anchor' | 'html' | 'custom';
+  type?: 'currency' | 'icon' | 'date' | 'anchor' | 'html' | 'custom' | 'number';
   direction?: string;
+  totalize?: boolean;
   show?: boolean;
   anchorUrl?: string;
   callback?: any;
@@ -56,4 +59,10 @@ export interface TableActions {
 export interface SortColumn {
   property: string;
   direction: string;
+}
+
+export interface RowStyle {
+  classes: string;
+  dataField: string;
+  callback: any;
 }

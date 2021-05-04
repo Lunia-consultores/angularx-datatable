@@ -15,7 +15,7 @@ export class DataService {
         apellidos: 'Cerezuela',
         is_lerdo: true,
         telefono: '634033415',
-        numero_linea: 6,
+        numero_linea: 6.003,
       },
       {
         id: 2,
@@ -23,7 +23,7 @@ export class DataService {
         apellidos: 'Cerezuela',
          is_lerdo: false,
         telefono: '968553568',
-        numero_linea: 1,
+        numero_linea: 1.125,
 
       },
       {

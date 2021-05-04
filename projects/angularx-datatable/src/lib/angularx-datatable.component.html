@@ -81,7 +81,7 @@
           [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
           *ngFor="let column of settings.columns; let index = index;">
         <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
-
+        <span *ngIf="column.type === 'number'">{{row[column.property] | number: '0.0-3'}}</span>
         <span *ngIf="column.type === 'icon'">
           <ng-container *ngFor="let iconCase of column.iconCases" [ngSwitch]="row[column.property]">
             <span *ngSwitchCase="iconCase.id" class="{{iconCase.class}}">
@@ -110,6 +110,22 @@
         </button>
       </span>
 
+      </td>
+    </tr>
+    <tr *ngIf="settings.showTotalRow" class="font-weight-bold">
+      <td *ngIf="settings.showchecksColumn">
+
+      </td>
+      <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
+          [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+          *ngFor="let column of settings.columns; let index = index;">
+
+        <span *ngIf="column.totalize && column.type === 'currency'">{{getTotalColumn(column.property) | currency: 'EUR'}}</span>
+        <span *ngIf="column.totalize && column.type === 'custom'">{{getTotalColumn(column.property)}}</span>
+        <span *ngIf="column.totalize && column.type === 'number'">{{getTotalColumn(column.property) | number: '0.0-3'}}</span>
+
+      </td>
+      <td *ngIf="settings.rowActions" class="text-right">
       </td>
     </tr>
     </tbody>

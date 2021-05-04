@@ -229,8 +229,12 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   public getRowClass(row): string {
     let classes = '';
-    if (this.settings.rowsStyles) {
-      classes = this.settings.rowsStyles.callback(row);
+    if (this.settings.rowStyles) {
+      for (const rowStyle of this.settings.rowStyles) {
+        if (rowStyle.callback(row)) {
+          classes = classes + ' ' + rowStyle.classes;
+        }
+      }
       return classes;
     }
     return '';
@@ -365,10 +369,20 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   public resetTableSavedConfig(): void {
     this.saveTableConfiguration.clearConfig(this.settings.table_uuid);
+    this.searchForm.reset();
     this.tableData = this.originalTableData;
     this.sortColumn = null;
     this.resetSort();
     this.applyTableSettings();
     this.resetColumnVisivility();
   }
+
+  public getTotalColumn(property: string): number {
+    let total = 0;
+    this.tableData.forEach( row => {
+      total += row[property];
+    });
+    return total;
+  }
+
 }
