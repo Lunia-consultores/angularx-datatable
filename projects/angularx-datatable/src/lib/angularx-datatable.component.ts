@@ -58,7 +58,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   private applyTableSettings(): void {
     if (!this.settings.enable_save_conf) {
-      this.tableData = this.sort(this.originalTableData, this.sortColumn, this.sortDirection);
+      this.filtrarOrdenar();
     }
 
     this.setColumnsAsVisible();
@@ -132,10 +132,9 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public onSort({column, direction}: SortEvent): void {
-    // this.applyFilters();
-    this.headers.forEach(header => {
-    });
-    this.tableData = this.sort(this.tableData, column, direction);
+    this.sortDirection = direction;
+    this.sortColumn = column;
+    this.filtrarOrdenar();
     this.sortHiddenColumns();
   }
 
@@ -144,21 +143,24 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   private sort(tableData: any[], column: string, direction: string): any[] {
-    this.sortDirection = direction;
-    this.sortColumn = column;
+
     if (this.headers) {
       this.resetSort();
     }
     this.saveTableConfiguration.saveTableSortStatus(this.settings.table_uuid, column, direction);
-    if (direction === '') {
-      this.tableData = this.originalTableData;
-      return this.tableData;
-    }
-    return [...this.tableData].sort((a, b) => {
-      const res = this.compare(a[column], b[column]);
-      return direction === 'asc' ? res : -res;
-    });
 
+    return [...tableData].sort((a, b) => {
+      const res = this.compare(a[column], b[column]);
+      if (direction === 'asc') {
+        return res;
+      }
+      if (direction === 'desc') {
+        return -res;
+      }
+      if (direction === ''){
+        return 0;
+      }
+    });
   }
 
   private sortHiddenColumns(): void {
@@ -181,7 +183,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
         header.reset();
       }
     });
-    this.tableData = this.originalTableData;
+    // this.tableData = this.originalTableData;
   }
 
   private resetColumnVisivility(): void {
@@ -269,8 +271,16 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     });
 
     this.searchForm.valueChanges.subscribe((value) => {
-      this.applyFilters();
+      this.filtrarOrdenar();
     });
+  }
+
+  private filtrarOrdenar(): void {
+    if (this.sortDirection === '') {
+      this.tableData = this.originalTableData;
+    }
+    const filteredData = this.applyFilters();
+    this.tableData = this.sort(filteredData, this.sortColumn, this.sortDirection);
   }
 
   public hayFiltros(): boolean {
@@ -283,17 +293,17 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     return hayFiltros;
   }
 
-  public applyFilters(): void {
+  public applyFilters(): any {
     const filterValue = this.searchForm.value;
-    this.tableData = this.originalTableData;
+    let data = this.originalTableData;
     this.settings.columns.forEach(column => {
       if (filterValue[column.property]) {
-        this.tableData = this.tableData.filter(x => {
+        data = data.filter(x => {
           return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
         });
       }
     });
-    this.tableData = this.sort(this.tableData, this.sortColumn, this.sortDirection);
+    return data;
   }
 
   private getCheckedRows(): any[] {
