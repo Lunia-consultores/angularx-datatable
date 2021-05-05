@@ -34,6 +34,12 @@ export class SaveTableConfigurationService {
     localStorage.setItem(tableUuid, JSON.stringify(tableStatus));
   }
 
+  public saveTableActivePage(tableUuid: string, page): void {
+    const tableStatus = this.getSortConfig(tableUuid);
+    tableStatus.page = page;
+    localStorage.setItem(tableUuid, JSON.stringify(tableStatus));
+  }
+
   public saveTableColumnVisibility(tableUuid: string, columnsVisivility): void {
     const tableStatus = this.getSortConfig(tableUuid);
     tableStatus.columns_visibility = columnsVisivility;

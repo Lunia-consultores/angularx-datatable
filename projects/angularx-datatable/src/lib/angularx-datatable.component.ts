@@ -81,6 +81,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     setTimeout(() =>
       {
         this.applySavedSort();
+        this.applySavedPage();
       },
       0);
     }
@@ -339,6 +340,15 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  private applySavedPage(): void {
+
+    const sortConfig = this.saveTableConfiguration.getTableConfig(this.settings.table_uuid);
+    console.log(sortConfig);
+
+    if (sortConfig.page){
+       this.page = sortConfig.page;
+     }
+  }
 
   public showColumnChange($event: any, columnProperty: string): void {
     const columnasNovisibles = [];
@@ -375,6 +385,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     this.resetSort();
     this.applyTableSettings();
     this.resetColumnVisivility();
+    this.resetPage();
   }
 
   public getTotalColumn(property: string): number {
@@ -385,4 +396,11 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     return total;
   }
 
+  public storeActivePage(): void {
+    this.saveTableConfiguration.saveTableActivePage(this.settings.table_uuid, this.page);
+  }
+
+  private resetPage(): void  {
+    this.page = 1;
+  }
 }

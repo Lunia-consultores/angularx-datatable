@@ -5,6 +5,7 @@ export interface ColumnVisibility {
 }
 
 export interface TableStatus {
+  page: number;
   sort: any;
   columns_visibility: ColumnVisibility[];
 }

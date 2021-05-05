@@ -84,7 +84,7 @@ export class AppComponent implements OnInit {
     pageSize: 2,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
-    usePagination: false,
+    usePagination: true,
   };
   public tableSettings2: DatatableSettings = {
     title: '',
