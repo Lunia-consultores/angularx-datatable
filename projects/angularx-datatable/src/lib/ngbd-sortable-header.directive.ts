@@ -22,7 +22,7 @@ export class NgbdSortableHeaderDirective {
   }
   @HostBinding('class.desc') get desc(): boolean { return this.direction === 'desc'; }
 
-  @HostListener('click', ['$event.target'])
+  @HostListener('click', [])
   onClick(): void {
     this.rotate();
   }
