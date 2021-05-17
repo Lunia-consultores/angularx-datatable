@@ -59,6 +59,12 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   private applyTableSettings(): void {
     if (!this.settings.enable_save_conf) {
       this.filtrarOrdenar();
+    } else {
+      setTimeout(() => {
+          this.applySavedSort();
+          this.applySavedPage();
+        },
+        0);
     }
 
     this.setColumnsAsVisible();
@@ -78,18 +84,15 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    setTimeout(() =>
-      {
+    setTimeout(() => {
         this.applySavedSort();
         this.applySavedPage();
       },
       0);
-    }
+  }
 
   public ngOnInit(): void {
-
     this.setSearchForm();
-
   }
 
   public ocultarColumna(property: string): boolean {
@@ -103,11 +106,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   private checkSelectAll(): void {
     const columnsChecked = this.tableData.filter(column => column.checked === true);
-    if (columnsChecked.length > 0) {
-      this.settings.someSelectedRows = true;
-    } else {
-      this.settings.someSelectedRows = false;
-    }
+    this.settings.someSelectedRows = columnsChecked.length > 0;
 
     if (columnsChecked.length === this.tableData.length) {
       this.searchForm.patchValue({checkSelectAll: true});
@@ -158,7 +157,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       if (direction === 'desc') {
         return -res;
       }
-      if (direction === ''){
+      if (direction === '') {
         return 0;
       }
     });
@@ -184,7 +183,11 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
         header.reset();
       }
     });
-    // this.tableData = this.originalTableData;
+  }
+  private resetAllSort(): void {
+    this.headers.forEach(header => {
+        header.reset();
+    });
   }
 
   private resetColumnVisivility(): void {
@@ -340,14 +343,14 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   private applySavedPage(): void {
 
     const sortConfig = this.saveTableConfiguration.getTableConfig(this.settings.table_uuid);
-    console.log(sortConfig);
 
-    if (sortConfig.page){
-       this.page = sortConfig.page;
-     }
+    if (sortConfig.page) {
+      this.page = sortConfig.page;
+    }
   }
 
   public showColumnChange($event: any, columnProperty: string): void {
@@ -379,10 +382,10 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   public resetTableSavedConfig(): void {
     this.saveTableConfiguration.clearConfig(this.settings.table_uuid);
+    this.resetAllSort();
     this.searchForm.reset();
     this.tableData = this.originalTableData;
     this.sortColumn = null;
-    this.resetSort();
     this.applyTableSettings();
     this.resetColumnVisivility();
     this.resetPage();
@@ -390,7 +393,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   public getTotalColumn(property: string): number {
     let total = 0;
-    this.tableData.forEach( row => {
+    this.tableData.forEach(row => {
       total += row[property];
     });
     return total;
@@ -400,7 +403,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
     this.saveTableConfiguration.saveTableActivePage(this.settings.table_uuid, this.page);
   }
 
-  private resetPage(): void  {
+  private resetPage(): void {
     this.page = 1;
   }
 }
