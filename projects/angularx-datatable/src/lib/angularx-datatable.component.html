@@ -3,7 +3,7 @@
     <div class="text-muted p-2">
       <ng-container *ngIf="(getCheckedRowsNumber() > 0)">
         <span class="font-weight-bold">{{getCheckedRowsNumber()}}</span>
-        <span *ngIf="getCheckedRowsNumber() ==1"> {{'elementos seleccionado' | translate }}.</span>
+        <span *ngIf="getCheckedRowsNumber() ==1"> {{'elemento seleccionado' | translate }}.</span>
         <span *ngIf="getCheckedRowsNumber() !=1"> {{'elementos seleccionados' | translate }}.</span>
       </ng-container>
     </div>
@@ -18,7 +18,7 @@
         <button *ngIf="settings.enable_save_conf"
                 class="btn btn-link text-dark"
                 (click)="resetTableSavedConfig()">
-          <i class="fas fa-redo-alt"></i> {{'Reset configuracion' | translate}}
+          <i class="fas fa-redo-alt"></i> {{'Reset configuración' | translate}}
         </button>
       </div>
       <div>
