@@ -93,6 +93,9 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    if (this.settings.usePagination === undefined) {
+      this.settings.usePagination = true;
+    }
     this.setSearchForm();
   }
 

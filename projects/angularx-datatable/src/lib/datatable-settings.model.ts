@@ -17,7 +17,7 @@ export interface DatatableSettings {
   enableColumnFilters?: boolean;
   showTotalRow?: boolean;
   hiddenSortColumns?: SortColumn[];
-  usePagination: boolean;
+  usePagination?: boolean;
   defaultSortColumnIndex?: number;
   defaultShortColumn?: SortColumn;
 }
