@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   public tableSettings: DatatableSettings = {
     title: '',
     table_uuid: 'tabla_app_component',
-    enable_save_conf: true,
+    enable_save_conf: false,
     showTotalRow: true,
     enableColumnFilters: false,
     columns: [

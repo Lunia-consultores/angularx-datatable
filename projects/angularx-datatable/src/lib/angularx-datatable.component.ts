@@ -308,15 +308,17 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public applyFilters(): any {
-    const filterValue = this.searchForm.value;
     let data = this.originalTableData;
-    this.settings.columns.forEach(column => {
-      if (filterValue[column.property]) {
-        data = data.filter(x => {
-          return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
-        });
-      }
-    });
+    if (this.searchForm) {
+      const filterValue = this.searchForm.value;
+      this.settings.columns.forEach(column => {
+        if (filterValue[column.property]) {
+          data = data.filter(x => {
+            return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+          });
+        }
+      });
+    }
     return data;
   }
 
