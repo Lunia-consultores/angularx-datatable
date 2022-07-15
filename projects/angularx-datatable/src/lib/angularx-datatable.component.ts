@@ -1,10 +1,10 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   QueryList,
   ViewChild,
   ViewChildren
@@ -24,6 +24,7 @@ import {SaveTableConfigurationService} from './save-table-configuration.service'
 export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   @Input() settings: DatatableSettings;
+  @Output() checkBoxChanged = new EventEmitter<any>();
   @ViewChild('table', {static: false}) table;
   @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   public uuid = this.uuidv4();
@@ -121,6 +122,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   public selectRow($event, field): void {
     field.checked = $event.target.checked;
     this.checkSelectAll();
+    this.checkBoxChanged.emit();
   }
 
   public selectAll($event): void {
@@ -129,6 +131,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
         row.checked = $event.target.checked;
       }
     });
+    this.checkBoxChanged.emit();
   }
 
   public onSort({column, direction}: SortEvent): void {

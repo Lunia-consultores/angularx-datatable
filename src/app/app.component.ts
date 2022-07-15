@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DatatableSettings} from '../../projects/angularx-datatable/src/lib/datatable-settings.model';
 import {DataService} from './data.service';
+import {AngularxDatatableComponent} from '../../projects/angularx-datatable/src/lib/angularx-datatable.component';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,7 @@ import {DataService} from './data.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('angularxDatatableComponent', {static: true}) angularxDatatableComponent: AngularxDatatableComponent;
   public title = 'datable';
   public data;
   public data2;
@@ -85,7 +87,8 @@ export class AppComponent implements OnInit {
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     usePagination: true,
-  };
+  }
+  ;
   public tableSettings2: DatatableSettings = {
     title: '',
     table_uuid: 'tabla_app_component2',
@@ -146,9 +149,8 @@ export class AppComponent implements OnInit {
     pageSize: 2,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
-    usePagination: false,
+    usePagination: false
   };
-
 
   constructor(private dataService: DataService) { }
 
@@ -159,5 +161,9 @@ export class AppComponent implements OnInit {
 
   public refrescarListado(): void {
     this.data = this.dataService.getTrabajadores();
+  }
+
+  public checkBoxChanged(): void {
+    console.log(this.angularxDatatableComponent.getSelectedRows());
   }
 }
