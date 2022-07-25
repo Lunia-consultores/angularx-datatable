@@ -35,11 +35,31 @@ export class AppComponent implements OnInit {
         property: 'apellidos',
       },
       {
+        name: 'Notas',
+        nameInnerHtml: '<span class="c-pointer text-primary"><i class="fas fa-user"></i></span>',
+        property: 'telefono',
+        type: 'custom',
+        customContent: (row) => {
+          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
+        }
+      },
+      {
         name: 'Telefono',
         property: 'telefono',
         type: 'custom',
         customContent: (row) => {
           return `<span>${row.telefono}</span>`;
+        }
+      },
+      {
+        name: 'Notas',
+        nameInnerHtml: '<span class="c-pointer text-primary"><i class="fas fa-user"></i></span>',
+        nameInnerHtmlTitle: 'Usuario registrado',
+        classes: 'text-center',
+        property: 'telefono',
+        type: 'custom',
+        customContent: (row) => {
+          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
         }
       }
     ],
@@ -110,6 +130,17 @@ export class AppComponent implements OnInit {
         type: 'custom',
         customContent: (row) => {
           return `<span>${row.telefono}</span>`;
+        }
+      },
+      {
+        name: 'Notas',
+        nameInnerHtml: '<span class="c-pointer text-primary"><i class="fas fa-user"></i></span>',
+        nameInnerHtmlTitle: 'Usuario vinculado',
+        classes: 'text-center',
+        property: 'telefono',
+        type: 'custom',
+        customContent: (row) => {
+          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
         }
       }
     ],

@@ -55,7 +55,10 @@
           class="{{column.classes}}" style="cursor: pointer" [ngStyle]="{'width': column.width}"
           *ngFor="let column of settings.columns; let index = index;">
         <div sortable="{{column.property}}" (sort)="onSort($event)">
-          {{column.name | translate}}
+          <span *ngIf="!column.nameInnerHtml">
+            {{column.name | translate}}
+          </span>
+          <span *ngIf="column.nameInnerHtml" [innerHtml]="column.nameInnerHtml" [title]="column.nameInnerHtmlTitle || ''"></span>
           <i class="fas fa-chevron-down down-icon"></i>
           <i class="fas fa-chevron-up up-icon"></i>
         </div>

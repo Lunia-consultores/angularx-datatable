@@ -25,6 +25,8 @@ export interface DatatableSettings {
 export interface ColumnSettings {
   visible?: boolean;
   name: string;
+  nameInnerHtml?: string;
+  nameInnerHtmlTitle?: string;
   classes?: string;
   property: string;
   type?: 'currency' | 'icon' | 'date' | 'anchor' | 'html' | 'custom' | 'number';
