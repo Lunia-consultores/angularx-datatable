@@ -20,6 +20,7 @@ export interface DatatableSettings {
   usePagination?: boolean;
   defaultSortColumnIndex?: number;
   defaultShortColumn?: SortColumn;
+  cursorPointerRow?: boolean;
 }
 
 export interface ColumnSettings {

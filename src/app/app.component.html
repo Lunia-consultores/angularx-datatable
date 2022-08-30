@@ -8,7 +8,11 @@
     <div class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <lib-angularx-datatable [settings]="tableSettings" [data]="data" (checkBoxChanged)="checkBoxChanged()" #angularxDatatableComponent></lib-angularx-datatable>
+          <lib-angularx-datatable [settings]="tableSettings"
+                                  [data]="data"
+                                  (checkBoxChanged)="checkBoxChanged()"
+                                  #angularxDatatableComponent>
+          </lib-angularx-datatable>
         </div>
       </div>
     </div>

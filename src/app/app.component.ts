@@ -49,6 +49,9 @@ export class AppComponent implements OnInit {
         type: 'custom',
         customContent: (row) => {
           return `<span>${row.telefono}</span>`;
+        },
+        callback: (row) => {
+          alert('callback funcionando');
         }
       },
       {
@@ -99,13 +102,14 @@ export class AppComponent implements OnInit {
     rowsStyles:
       {
         callback: (row) => {
-              return 'table-danger';
+          return 'table-danger';
         }
       }
     ,
     pageSize: 2,
-    classes: 'table-sm table-striped',
+    classes: 'table-sm table-striped table table-hover',
     showchecksColumn: true,
+    cursorPointerRow: true
   };
   public tableSettings2: DatatableSettings = {
     title: '',
@@ -171,7 +175,7 @@ export class AppComponent implements OnInit {
     rowsStyles:
       {
         callback: (row) => {
-              return 'table-danger';
+          return 'table-danger';
         }
       }
     ,
@@ -181,7 +185,8 @@ export class AppComponent implements OnInit {
     usePagination: false
   };
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {
+  }
 
   public ngOnInit(): void {
     this.data = this.dataService.getTrabajadores();

@@ -80,7 +80,7 @@
           <label class="custom-control-label" for="{{index + uuid}}"></label>
         </div>
       </td>
-      <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
+      <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes" [headers]="[index + 1]"
           [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
           *ngFor="let column of settings.columns; let index = index;">
         <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
@@ -101,7 +101,7 @@
         <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
 
         <div *ngIf="column.type === 'custom'"
-             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))" (click)="column.callback(row)">
+             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))" (click)="callback(column, row)">
         </div>
       </td>
       <td *ngIf="settings.rowActions" class="text-right">

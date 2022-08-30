@@ -93,8 +93,13 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+
     if (this.settings.usePagination === undefined) {
       this.settings.usePagination = true;
+    }
+
+    if (this.settings.cursorPointerRow === undefined) {
+      this.settings.cursorPointerRow = false;
     }
     this.setSearchForm();
   }
@@ -190,9 +195,10 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   private resetAllSort(): void {
     this.headers.forEach(header => {
-        header.reset();
+      header.reset();
     });
   }
 
@@ -413,5 +419,11 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   private resetPage(): void {
     this.page = 1;
+  }
+
+  public callback(column: ColumnSettings, row: any): void {
+    if (column.callback !== undefined) {
+      column.callback(row);
+    }
   }
 }
