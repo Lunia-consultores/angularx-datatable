@@ -14,6 +14,7 @@ import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.dir
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'lib-angularx-datatable',
@@ -81,6 +82,7 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
 
   constructor(public sanitized: DomSanitizer,
               public saveTableConfiguration: SaveTableConfigurationService,
+              private datePipe: DatePipe,
               private formBuilder: FormBuilder) {
   }
 
@@ -319,9 +321,19 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
       const filterValue = this.searchForm.value;
       this.settings.columns.forEach(column => {
         if (filterValue[column.property]) {
-          data = data.filter(x => {
-            return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
-          });
+          if (column.type === 'number') {
+            data = data.filter(x => {
+              return ((x[column.property] ? x[column.property].toString() : '').includes(filterValue[column.property].toString()));
+            });
+          } else if (column.type === 'date') {
+            data = data.filter(x => {
+              return ((x[column.property] ? this.datePipe.transform(x[column.property], 'dd/MM/yyyy') : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+            });
+          } else {
+            data = data.filter(x => {
+              return ((x[column.property] ? x[column.property] : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+            });
+          }
         }
       });
     }

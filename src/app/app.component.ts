@@ -18,12 +18,17 @@ export class AppComponent implements OnInit {
     table_uuid: 'tabla_app_component',
     enable_save_conf: false,
     showTotalRow: true,
-    enableColumnFilters: false,
+    enableColumnFilters: true,
     columns: [
       {
         name: 'Línea',
         property: 'numero_linea',
         totalize: true,
+        type: 'number'
+      },
+      {
+        name: 'Línea',
+        property: 'numero_linea',
         type: 'number'
       },
       {
@@ -33,6 +38,11 @@ export class AppComponent implements OnInit {
       {
         name: 'Apellidos',
         property: 'apellidos',
+      },
+      {
+        name: 'Fecha',
+        property: 'fecha',
+        type: 'date'
       },
       {
         name: 'Notas',
@@ -123,6 +133,7 @@ export class AppComponent implements OnInit {
       {
         name: 'Nombre',
         property: 'nombre',
+        type: "anchor"
       },
       {
         name: 'Apellidos',
