@@ -57,7 +57,7 @@ export class BootstrapViewComponent implements OnInit {
         }
       },
       {
-        name: 'Telefono',
+        name: 'Telefono nombre columna largo',
         property: 'telefono',
         type: 'custom',
         customContent: (row) => {

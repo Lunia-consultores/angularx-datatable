@@ -12,7 +12,7 @@ export class DataService {
     return [
       {
         id: 1,
-        nombre: 'Miguel',
+        nombre: 'Miguel Miguel Miguel',
         fecha: '2022-01-05',
         apellidos: 'Cerezuela',
         is_lerdo: true,
@@ -174,7 +174,7 @@ export class DataService {
       },
       {
         id: 1,
-        nombre: 'Miguel',
+        nombre: 'Miguel Miguel Miguel MiguelMiguelMi guelMiguelM',
         fecha: '2022-01-05',
         apellidos: 'Cerezuela',
         is_lerdo: true,
