@@ -14,15 +14,13 @@ import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.dir
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
-import {DatePipe} from "@angular/common";
+import {DatePipe} from '@angular/common';
 
 @Component({
-  selector: 'lib-angularx-datatable',
-  templateUrl: 'angularx-datatable.component.html',
-  styleUrls: ['angularx-datatable.component.scss']
+  selector: 'lib-angularx-base-datatable',
+  template: '',
 })
-
-export class AngularxDatatableComponent implements OnInit, AfterViewInit {
+export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
 
   @Input() settings: DatatableSettings;
   @Output() checkBoxChanged = new EventEmitter<any>();
@@ -327,7 +325,8 @@ export class AngularxDatatableComponent implements OnInit, AfterViewInit {
             });
           } else if (column.type === 'date') {
             data = data.filter(x => {
-              return ((x[column.property] ? this.datePipe.transform(x[column.property], 'dd/MM/yyyy') : '').toLowerCase().includes(filterValue[column.property].toLowerCase()));
+              return ((x[column.property] ? this.datePipe.transform(x[column.property], 'dd/MM/yyyy') : '')
+                .toLowerCase().includes(filterValue[column.property].toLowerCase()));
             });
           } else {
             data = data.filter(x => {

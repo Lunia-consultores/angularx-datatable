@@ -1,14 +1,21 @@
 import { NgModule } from '@angular/core';
-import { AngularxDatatableComponent } from './angularx-datatable.component';
 import {NgbDropdownModule, NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgbdSortableHeaderDirective} from './ngbd-sortable-header.directive';
 import {CommonModule, DatePipe} from '@angular/common';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
+import { AngularxDatatableBootstrapComponent } from './angularx-datatable-bootstrap/angularx-datatable-bootstrap.component';
+import { AngularxDatatableVanillaComponent } from './angularx-datatable-vanilla/angularx-datatable-vanilla.component';
+import {AngularxBaseDatatableComponent} from './angularx-base-datatable.component';
 
 @NgModule({
-  declarations: [AngularxDatatableComponent, NgbdSortableHeaderDirective],
+  declarations: [
+    NgbdSortableHeaderDirective,
+    AngularxBaseDatatableComponent,
+    AngularxDatatableBootstrapComponent,
+    AngularxDatatableVanillaComponent
+  ],
   imports: [
     NgbDropdownModule,
     FormsModule,
@@ -16,9 +23,8 @@ import {SaveTableConfigurationService} from './save-table-configuration.service'
     CommonModule,
     NgbPaginationModule,
     ReactiveFormsModule
-
   ],
-  exports: [AngularxDatatableComponent],
+  exports: [AngularxBaseDatatableComponent, AngularxDatatableBootstrapComponent, AngularxDatatableVanillaComponent],
   providers: [
     SaveTableConfigurationService,
     DatePipe

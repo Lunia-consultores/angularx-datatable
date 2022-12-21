@@ -10,6 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppResolverService} from './app-resolver.service';
 import {AngularxDatatableModule} from '../../projects/angularx-datatable/src/lib/angularx-datatable.module';
+import {AppRoutingModule} from './app-routing.module';
 registerLocaleData(localeEs, 'es');
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -22,12 +23,13 @@ export function startupServiceFactory(appResolverService: AppResolverService): (
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    AngularxDatatableModule,
     HttpClientModule,
+    AppRoutingModule,
+    AngularxDatatableModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

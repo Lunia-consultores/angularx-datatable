@@ -1,0 +1,157 @@
+<div *ngIf="tableData">
+  <div class="d-flex justify-content-between">
+    <div class="text-muted p-2">
+      <ng-container *ngIf="(getCheckedRowsNumber() > 0)">
+        <span class="font-weight-bold">{{getCheckedRowsNumber()}}</span>
+        <span *ngIf="getCheckedRowsNumber() ==1"> {{'elemento seleccionado' | translate }}.</span>
+        <span *ngIf="getCheckedRowsNumber() !=1"> {{'elementos seleccionados' | translate }}.</span>
+      </ng-container>
+    </div>
+    <div class="d-flex">
+      <div class="justify-content-end">
+        <ng-container *ngFor="let tableAction of settings.tableActions">
+          <button *ngIf="(getCheckedRowsNumber() > 0) || (tableAction.visible === true)"
+                  (click)="tableAction.callback(getSelectedRows())"
+                  class="{{tableAction.classes}}"><i class="{{tableAction.icon}}"></i> {{tableAction.name | translate}}
+          </button>
+        </ng-container>
+        <button *ngIf="settings.enable_save_conf"
+                class="btn btn-link text-dark"
+                (click)="resetTableSavedConfig()">
+          <i class="fas fa-redo-alt" title="{{'Limpiar configuración' | translate}}"></i>
+        </button>
+      </div>
+      <div>
+        <div ngbDropdown [placement]="'bottom-right'" class="d-inline-block">
+          <button class="btn btn-link text-dark" id="dropdownBasic1" ngbDropdownToggle>{{ 'Columnas' | translate }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="p-2">
+            <div *ngFor="let column of settings.columns; let index = index;">
+              <div class="custom-control custom-checkbox">
+                <input (ngModelChange)="showColumnChange($event, column.property)" [(ngModel)]="column.show"
+                       type="checkbox" class="custom-control-input"
+                       id="{{'col-visibility-' + index + uuid}}" name="sdssds">
+                <label class="custom-control-label"
+                       for="{{'col-visibility-' + index + uuid}}"> {{column.name | translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table {{settings.classes}}">
+    <thead>
+    <tr [formGroup]="searchForm">
+      <th width="50px" *ngIf="settings.showchecksColumn">
+        <div class="custom-control custom-checkbox">
+          <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox"
+                 class="custom-control-input"
+                 id="{{-1 + uuid}}" name="example1">
+          <label class="custom-control-label" for="{{-1 + uuid}}"></label>
+        </div>
+      </th>
+      <th [hidden]="column.show === false"
+          class="{{column.classes}}" style="cursor: pointer" [ngStyle]="{'width': column.width}"
+          *ngFor="let column of settings.columns; let index = index;">
+        <div sortable="{{column.property}}" (sort)="onSort($event)">
+          <span *ngIf="!column.nameInnerHtml">
+            {{column.name | translate}}
+          </span>
+          <span *ngIf="column.nameInnerHtml" [innerHtml]="column.nameInnerHtml" [title]="column.nameInnerHtmlTitle || ''"></span>
+          <i class="fas fa-chevron-down down-icon"></i>
+          <i class="fas fa-chevron-up up-icon"></i>
+        </div>
+        <div *ngIf="settings.enableColumnFilters">
+          <input type="text" class="form-control form-control-sm" [formControlName]="column.property">
+        </div>
+      </th>
+      <th *ngIf="settings.rowActions"></th>
+    </tr>
+    </thead>
+    <tbody #table>
+    <tr (click)="rowClick(row)"
+        *ngFor="let row of settings.usePagination ? (tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize) : tableData; let index = index;"
+        [class]="getRowClass(row)">
+      <td *ngIf="settings.showchecksColumn">
+        <div class="custom-control custom-checkbox">
+          <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)" class="custom-control-input"
+                 id="{{index + uuid}}" name="example1">
+          <label class="custom-control-label" for="{{index + uuid}}"></label>
+        </div>
+      </td>
+      <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes" [headers]="[index + 1]"
+          [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+          *ngFor="let column of settings.columns; let index = index;">
+        <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
+        <span *ngIf="column.type === 'number'">{{row[column.property] | number: '0.0-3'}}</span>
+        <span *ngIf="column.type === 'icon'">
+          <ng-container *ngFor="let iconCase of column.iconCases" [ngSwitch]="row[column.property]">
+            <span *ngSwitchCase="iconCase.id" class="{{iconCase.class}}">
+            <i class="{{iconCase.icon}}"></i>
+            </span>
+          </ng-container>
+        </span>
+
+        <span *ngIf="column.type === 'date'">{{row[column.property] | date: 'dd/MM/yyyy'}}</span>
+
+        <span *ngIf="column.type === 'anchor'"><button class="btn btn-link p-0"
+                                                       (click)="column.callback(row)">{{row[column.property]}}</button></span>
+
+        <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
+
+        <div *ngIf="column.type === 'custom'"
+             [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))" (click)="callback(column, row)">
+        </div>
+      </td>
+      <td *ngIf="settings.rowActions" class="text-right">
+        <span *ngFor="let action of settings.rowActions" class="ml-2">
+        <button *ngIf="getActionVisivility(action, row)"
+                class="btn btn-sm badge text-uppercase {{action.classes}}"
+                (click)="action.callback(row)">
+          <i class="{{action.icon}}"></i>{{action.name | translate}}
+        </button>
+      </span>
+
+      </td>
+    </tr>
+    <tr *ngIf="settings.showTotalRow" class="font-weight-bold">
+      <td *ngIf="settings.showchecksColumn">
+
+      </td>
+      <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
+          [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+          *ngFor="let column of settings.columns; let index = index;">
+
+        <span *ngIf="column.totalize && column.type === 'currency'">{{getTotalColumn(column.property) | currency: 'EUR'}}</span>
+        <span *ngIf="column.totalize && column.type === 'custom'">{{getTotalColumn(column.property)}}</span>
+        <span *ngIf="column.totalize && column.type === 'number'">{{getTotalColumn(column.property) | number: '0.0-3'}}</span>
+
+      </td>
+      <td *ngIf="settings.rowActions" class="text-right">
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2" *ngIf="settings.usePagination">
+    <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
+      <span *ngIf="tableData.length >= settings.pageSize">
+        <span
+          *ngIf="page >= (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{tableData.length % settings.pageSize}}</span>
+        <span
+          *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
+      </span>
+      <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
+    </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
+    </div>
+    <ngb-pagination
+      [collectionSize]="tableData.length"
+      [(page)]="page"
+      (pageChange)="storeActivePage()"
+      [maxSize]="7"
+      [pageSize]="settings.pageSize">
+      <ng-template ngbPaginationEllipsis>...</ng-template>
+    </ngb-pagination>
+  </div>
+</div>
