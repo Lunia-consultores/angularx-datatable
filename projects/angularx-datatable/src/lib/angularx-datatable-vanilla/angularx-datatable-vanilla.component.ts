@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AngularxBaseDatatableComponent} from '../angularx-base-datatable.component';
 
 interface Paginacion {
@@ -20,6 +20,11 @@ export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComp
   public dropdownColumnasVisibles: boolean = false as boolean;
   public paginacion = {} as Paginacion;
 
+
+  set data(val: any) {
+    super.data = val;
+    this.calcularPaginacion();
+  }
 
   public ngOnInit(): void {
     super.ngOnInit();

@@ -203,7 +203,10 @@ export class VanillaViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.data = this.dataService.getTrabajadores();
+    this.data = [];
+    setTimeout(() => {
+      this.data = this.dataService.getTrabajadores();
+    }, 1000);
     this.data2 = this.dataService.getTrabajadores();
   }
 
