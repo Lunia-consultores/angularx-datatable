@@ -145,10 +145,9 @@
   <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
     <div class="texto-silenciado">{{ 'Mostrando' | translate}} <strong>
       <span *ngIf="tableData.length >= settings.pageSize">
-        <span
-          *ngIf="page >= (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{tableData.length % settings.pageSize}}</span>
-        <span
-          *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
+        <span>
+          {{paginacion.pagina_actual == paginacion.total_paginas ? (tableData.length % settings.pageSize) : settings.pageSize}}
+        </span>
       </span>
       <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
     </strong> {{ 'elementos de ' | translate }}<strong>{{tableData.length}}</strong>.

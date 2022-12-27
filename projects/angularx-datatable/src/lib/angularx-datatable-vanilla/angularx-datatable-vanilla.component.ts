@@ -36,7 +36,7 @@ export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComp
     this.paginacion.pagina_actual = 1;
     const tieneUltimaPaginaIncompleta = this.tableData.length % this.paginacion.elementos_por_pagina !== 0;
     this.paginacion.total_paginas = Math.trunc((this.tableData.length / this.paginacion.elementos_por_pagina)) + (tieneUltimaPaginaIncompleta ? 1 : 0);
-    this.recalcularPaginas(this.paginacion.pagina_actual);
+    this.navegarPagina(this.paginacion.pagina_actual);
   }
 
 
@@ -45,6 +45,7 @@ export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComp
       this.recalcularPaginas(pagina);
       this.paginacion.pagina_actual = pagina;
       this.page = pagina;
+      super.storeActivePage();
     }
   }
 

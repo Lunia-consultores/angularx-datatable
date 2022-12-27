@@ -114,7 +114,7 @@ export class VanillaViewComponent implements OnInit {
         }
       }
     ,
-    pageSize: 5,
+    pageSize: 15,
     classes: '',
     showchecksColumn: true,
     cursorPointerRow: true
