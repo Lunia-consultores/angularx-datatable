@@ -33,6 +33,7 @@ export interface ColumnSettings {
   type?: 'currency' | 'icon' | 'date' | 'anchor' | 'html' | 'custom' | 'number';
   direction?: string;
   totalize?: boolean;
+  totalizeWhen?: any;
   show?: boolean;
   anchorUrl?: string;
   callback?: any;

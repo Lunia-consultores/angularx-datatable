@@ -123,9 +123,9 @@
           [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
           *ngFor="let column of settings.columns; let index = index;">
 
-        <span *ngIf="column.totalize && column.type === 'currency'">{{getTotalColumn(column.property) | currency: 'EUR'}}</span>
-        <span *ngIf="column.totalize && column.type === 'custom'">{{getTotalColumn(column.property)}}</span>
-        <span *ngIf="column.totalize && column.type === 'number'">{{getTotalColumn(column.property) | number: '0.0-3'}}</span>
+        <span *ngIf="column.totalize && column.type === 'currency'">{{getColumnTotal(column) | currency: 'EUR'}}</span>
+        <span *ngIf="column.totalize && column.type === 'custom'">{{getColumnTotal(column)}}</span>
+        <span *ngIf="column.totalize && column.type === 'number'">{{getColumnTotal(column) | number: '0.0-3'}}</span>
 
       </td>
       <td *ngIf="settings.rowActions" class="text-right">

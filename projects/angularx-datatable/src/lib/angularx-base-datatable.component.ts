@@ -416,11 +416,23 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     this.resetPage();
   }
 
-  public getTotalColumn(property: string): number {
+  public getColumnTotal(column: ColumnSettings): number {
+
+    const property = column.property;
     let total = 0;
-    this.tableData.forEach(row => {
-      total += row[property];
-    });
+
+    if (column.totalizeWhen) {
+      this.tableData.forEach(row => {
+        if (column.totalizeWhen(row)) {
+          total += row[property];
+        }
+      });
+    } else {
+      this.tableData.forEach(row => {
+        total += row[property];
+      });
+    }
+
     return total;
   }
 

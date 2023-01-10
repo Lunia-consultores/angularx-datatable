@@ -27,6 +27,9 @@ export class VanillaViewComponent implements OnInit {
         name: 'Línea',
         property: 'numero_linea',
         totalize: true,
+        totalizeWhen: (row) => {
+          return row.nombre === 'Tomi';
+        },
         type: 'number'
       },
       {
