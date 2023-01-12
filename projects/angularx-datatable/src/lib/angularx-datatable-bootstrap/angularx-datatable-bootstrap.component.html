@@ -58,7 +58,8 @@
           <span *ngIf="!column.nameInnerHtml">
             {{column.name | translate}}
           </span>
-          <span *ngIf="column.nameInnerHtml" [innerHtml]="column.nameInnerHtml" [title]="column.nameInnerHtmlTitle || ''"></span>
+          <span *ngIf="column.nameInnerHtml" [innerHtml]="column.nameInnerHtml"
+                [title]="column.nameInnerHtmlTitle || ''"></span>
           <i class="fas fa-chevron-down down-icon"></i>
           <i class="fas fa-chevron-up up-icon"></i>
         </div>
@@ -71,7 +72,7 @@
     </thead>
     <tbody #table>
     <tr (click)="rowClick(row)"
-        *ngFor="let row of settings.usePagination ? (tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize) : tableData; let index = index;"
+        *ngFor="let row of settings.usePagination ? (tableData | slice: (page-1) * elementosAMostrar : (page-1) * elementosAMostrar + elementosAMostrar) : tableData; let index = index;"
         [class]="getRowClass(row)">
       <td *ngIf="settings.showchecksColumn">
         <div class="custom-control custom-checkbox">
@@ -80,7 +81,8 @@
           <label class="custom-control-label" for="{{index + uuid}}"></label>
         </div>
       </td>
-      <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes" [headers]="[index + 1]"
+      <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes"
+          [headers]="[index + 1]"
           [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
           *ngFor="let column of settings.columns; let index = index;">
         <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
@@ -135,22 +137,30 @@
   </table>
 
   <div class="d-flex justify-content-between p-2" *ngIf="settings.usePagination">
-    <div class="text-muted">{{ 'Mostrando' | translate}} <span class="font-weight-bold">
-      <span *ngIf="tableData.length >= settings.pageSize">
-        <span
-          *ngIf="page >= (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{tableData.length % settings.pageSize}}</span>
-        <span
-          *ngIf="page < (tableData.length/settings.pageSize + (tableData.length%settings.pageSize)/10)">{{settings.pageSize}}</span>
-      </span>
-      <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
-    </span> {{ 'elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
+    <div class="text-muted">{{ 'Mostrando' | translate}}
+      <select class="form-control-sm bg-transparent" #elementos
+              (change)="cambiarNumeroColumnasAMostrar(elementos.value)">
+        <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
+          <option *ngIf="tableData.length >= elementoAMostrar"
+                  [defaultSelected]="elementoAMostrar === this.settings.pageSize"
+                  [value]="elementoAMostrar">{{elementoAMostrar}}</option>
+        </ng-container>
+        <option [value]="'all'">Todos</option>
+      </select>
+      <ng-container *ngIf="this.elementosAMostrar < tableData.length">
+        {{ ' elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
+      </ng-container>
+      <ng-container *ngIf="this.elementosAMostrar === tableData.length">
+        <span>{{' los elementos' | translate}}</span>
+      </ng-container>
+
     </div>
     <ngb-pagination
       [collectionSize]="tableData.length"
       [(page)]="page"
       (pageChange)="storeActivePage()"
       [maxSize]="7"
-      [pageSize]="settings.pageSize">
+      [pageSize]="elementosAMostrar">
       <ng-template ngbPaginationEllipsis>...</ng-template>
     </ngb-pagination>
   </div>

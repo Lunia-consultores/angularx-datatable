@@ -123,7 +123,7 @@ export class BootstrapViewComponent implements OnInit {
         }
       }
     ,
-    pageSize: 5,
+    pageSize: 15,
     classes: 'table-sm table-striped table table-hover',
     showchecksColumn: true,
     cursorPointerRow: true
@@ -197,7 +197,7 @@ export class BootstrapViewComponent implements OnInit {
         }
       }
     ,
-    pageSize: 2,
+    pageSize: 15,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     usePagination: false

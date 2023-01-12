@@ -33,6 +33,8 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   public originalTableData = [];
   private sortDirection = '';
   private sortColumn = '';
+  public elementosAMostrar = 0;
+  public elementosAMostrarSelect: number[] = [];
 
   get data(): any {
     return this.tableData;
@@ -97,6 +99,8 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     if (this.settings.usePagination === undefined) {
       this.settings.usePagination = true;
     }
+
+    this.calcularElementosAMostrarSelect()
 
     if (this.settings.cursorPointerRow === undefined) {
       this.settings.cursorPointerRow = false;
@@ -447,6 +451,21 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   public callback(column: ColumnSettings, row: any): void {
     if (column.callback !== undefined) {
       column.callback(row);
+    }
+  }
+
+  public cambiarNumeroColumnasAMostrar(numeroPaginas): void {
+    if (numeroPaginas === 'all') {
+      this.elementosAMostrar = this.tableData.length;
+    } else {
+      this.elementosAMostrar = numeroPaginas;
+    }
+  }
+
+  private calcularElementosAMostrarSelect() {
+    this.elementosAMostrar = this.settings.pageSize;
+    for (let i = 0; i < 4; i++) {
+      this.elementosAMostrarSelect.push(this.settings.pageSize * (2 ** i));
     }
   }
 }
