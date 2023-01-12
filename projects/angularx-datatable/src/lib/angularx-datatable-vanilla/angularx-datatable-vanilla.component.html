@@ -58,7 +58,8 @@
                  id="{{-1 + uuid}}" name="example1">
         </th>
         <th [hidden]="column.show === false"
-            class="{{column.classes}}" style="cursor: pointer; vertical-align: bottom; padding: 4px 0" [ngStyle]="{'width': column.width}"
+            class="{{column.classes}}" style="cursor: pointer; vertical-align: bottom; padding: 4px 0"
+            [ngStyle]="{'width': column.width}"
             *ngFor="let column of settings.columns; let index = index;">
           <div sortable="{{column.property}}" (sort)="onSort($event)">
           <span *ngIf="!column.nameInnerHtml">
@@ -78,7 +79,7 @@
       </thead>
       <tbody #table>
       <tr (click)="rowClick(row)"
-          *ngFor="let row of settings.usePagination ? (tableData | slice: (page-1) * settings.pageSize : (page-1) * settings.pageSize + settings.pageSize) : tableData; let index = index;"
+          *ngFor="let row of settings.usePagination ? (tableData | slice: (paginacion.pagina_actual-1) * elementosAMostrar : (paginacion.pagina_actual-1) * elementosAMostrar + elementosAMostrar) : tableData; let index = index;"
           [class]="'bordes-tabla ' + getRowClass(row)">
         <td *ngIf="settings.showchecksColumn" style="text-align: center">
           <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)"
@@ -106,7 +107,8 @@
           <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
 
           <div *ngIf="column.type === 'custom'"
-               [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))" (click)="callback(column, row)">
+               [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))"
+               (click)="callback(column, row)">
           </div>
         </td>
         <td *ngIf="settings.rowActions" style="text-align: right">
@@ -143,25 +145,34 @@
   </div>
 
   <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
-    <div class="texto-silenciado">{{ 'Mostrando' | translate}} <strong>
-      <span *ngIf="tableData.length >= settings.pageSize">
-        <span>
-          {{paginacion.pagina_actual == paginacion.total_paginas ? (tableData.length % settings.pageSize) : settings.pageSize}}
-        </span>
-      </span>
-      <span *ngIf="settings.pageSize > tableData.length">{{tableData.length}}</span>
-    </strong> {{ 'elementos de ' | translate }}<strong>{{tableData.length}}</strong>.
+    <div class="texto-silenciado">{{ 'Mostrando' | translate}}
+      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)">
+        <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
+          <option *ngIf="tableData.length >= elementoAMostrar"
+                  [defaultSelected]="elementoAMostrar === this.settings.pageSize"
+                  [value]="elementoAMostrar">{{elementoAMostrar}}</option>
+        </ng-container>
+        <option [value]="'all'">Todos</option>
+      </select>
+      <ng-container *ngIf="this.elementosAMostrar < tableData.length">
+        {{ ' elementos de ' | translate }}<span><b>{{tableData.length}}</b></span>.
+      </ng-container>
+      <ng-container *ngIf="this.elementosAMostrar === tableData.length">
+        <span>{{' los elementos' | translate}}</span>
+      </ng-container>
     </div>
     <ng-container *ngIf="paginacion !== undefined">
       <ul class="paginacion" style="display: flex">
-        <li class="{{ paginacion.pagina_actual === 1 ? 'pagina-deshabilitada': ''}} borde-radio-izquierda" (click)="paginaAnterior()">
+        <li class="{{ paginacion.pagina_actual === 1 ? 'pagina-deshabilitada': ''}} borde-radio-izquierda"
+            (click)="paginaAnterior()">
           <span class="flechas"><<</span>
         </li>
         <li *ngFor="let pagina of paginacion.paginas_a_mostrar" (click)="navegarPagina(pagina)"
             [ngClass]="{'pagina-seleccionada': this.paginacion.pagina_actual == pagina, 'pagina-deshabilitada': pagina == '...', '': this.paginacion.pagina_actual != pagina && pagina != '...'}">
           {{pagina}}
         </li>
-        <li (click)="siguientePagina()" class="{{ paginacion.pagina_actual === paginacion.total_paginas ? 'pagina-deshabilitada': ''}} borde-radio-derecha">
+        <li (click)="siguientePagina()"
+            class="{{ paginacion.pagina_actual === paginacion.total_paginas ? 'pagina-deshabilitada': ''}} borde-radio-derecha">
           <span class="flechas">>></span>
         </li>
       </ul>

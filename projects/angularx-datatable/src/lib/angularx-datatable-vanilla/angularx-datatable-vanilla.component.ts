@@ -92,4 +92,23 @@ export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComp
     }
     this.page = this.paginacion.pagina_actual;
   }
+
+  public cambiarNumeroColumnasAMostrar(numeroPaginas): void {
+
+    const todosElementosSeleccionados = numeroPaginas === 'all';
+
+    this.elementosAMostrar = todosElementosSeleccionados ? this.tableData.length : numeroPaginas;
+    this.paginacion.elementos_por_pagina = todosElementosSeleccionados ? this.tableData.length : numeroPaginas;
+
+    const tieneUltimaPaginaIncompleta = this.tableData.length % this.paginacion.elementos_por_pagina !== 0;
+    this.paginacion.total_paginas = todosElementosSeleccionados ? 1 : Math.trunc((this.tableData.length / this.paginacion.elementos_por_pagina)) + (tieneUltimaPaginaIncompleta ? 1 : 0);
+
+    if (todosElementosSeleccionados) {
+      this.navegarPagina(1)
+    } else if (this.paginacion.pagina_actual > this.paginacion.total_paginas) {
+      this.navegarPagina(this.paginacion.total_paginas);
+    } else {
+      this.navegarPagina(this.paginacion.pagina_actual);
+    }
+  }
 }
