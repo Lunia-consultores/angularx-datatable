@@ -99,6 +99,8 @@ export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComp
 
     this.elementosAMostrar = todosElementosSeleccionados ? this.tableData.length : numeroPaginas;
     this.paginacion.elementos_por_pagina = todosElementosSeleccionados ? this.tableData.length : numeroPaginas;
+    this.allSelected = todosElementosSeleccionados
+    this.optionSelected = numeroPaginas;
 
     const tieneUltimaPaginaIncompleta = this.tableData.length % this.paginacion.elementos_por_pagina !== 0;
     this.paginacion.total_paginas = todosElementosSeleccionados ? 1 : Math.trunc((this.tableData.length / this.paginacion.elementos_por_pagina)) + (tieneUltimaPaginaIncompleta ? 1 : 0);

@@ -147,10 +147,10 @@
         </ng-container>
         <option [value]="'all'">Todos</option>
       </select>
-      <ng-container *ngIf="this.elementosAMostrar < tableData.length">
+      <ng-container *ngIf="!allSelected">
         {{ ' elementos de ' | translate }}<span class="font-weight-bold">{{tableData.length}}</span>.
       </ng-container>
-      <ng-container *ngIf="this.elementosAMostrar === tableData.length">
+      <ng-container *ngIf="allSelected">
         <span>{{' los elementos' | translate}}</span>
       </ng-container>
 
