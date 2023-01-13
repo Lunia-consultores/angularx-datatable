@@ -51,6 +51,8 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
         this.sortColumn = this.settings.columns[0].property;
       }
 
+      this.calcularElementosAMostrarSelect();
+
       if (!this.saveTableConfiguration.getTableConfig(this.settings.table_uuid)) {
         this.saveTableConfiguration.createTableConfig(this.settings.table_uuid);
       }
@@ -100,7 +102,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
       this.settings.usePagination = true;
     }
 
-    this.calcularElementosAMostrarSelect()
+    this.calcularElementosAMostrarSelect();
 
     if (this.settings.cursorPointerRow === undefined) {
       this.settings.cursorPointerRow = false;
