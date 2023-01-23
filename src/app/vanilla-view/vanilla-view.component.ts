@@ -200,6 +200,7 @@ export class VanillaViewComponent implements OnInit {
     classes: 'table-sm table-striped',
     showchecksColumn: true,
     showRadioButtonColumn: true,
+    labelRadioButtonColumn: '',
     usePagination: false
   };
 

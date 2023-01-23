@@ -9,6 +9,7 @@ export interface DatatableSettings {
   rowsStyles?: RowsStyles;
   showchecksColumn: boolean;
   showRadioButtonColumn?: boolean;
+  labelRadioButtonColumn?: string;
   columnCheckExceptions?: any[];
   rowActions?: any[];
   rowStyles?: RowStyle[];
