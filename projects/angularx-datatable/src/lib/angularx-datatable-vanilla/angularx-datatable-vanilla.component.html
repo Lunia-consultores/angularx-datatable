@@ -57,6 +57,8 @@
           <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox"
                  id="{{-1 + uuid}}" name="example1">
         </th>
+        <th *ngIf="settings.showRadioButtonColumn" style="width: 40px; text-align: center">
+        </th>
         <th [hidden]="column.show === false"
             class="{{column.classes}}" style="cursor: pointer; vertical-align: bottom; padding: 4px 0"
             [ngStyle]="{'width': column.width}"
@@ -84,6 +86,10 @@
         <td *ngIf="settings.showchecksColumn" style="text-align: center">
           <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)"
                  id="{{index + uuid}}" name="example1">
+        </td>
+        <td *ngIf="settings.showRadioButtonColumn" style="text-align: center">
+          <input [checked]="row.checked" type="radio" (change)="selectRowRadioButtonSelected($event, row)"
+                 id="{{index + uuid}}" name="{{index + uuid}}">
         </td>
         <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes"
             [headers]="[index + 1]"
@@ -123,9 +129,8 @@
         </td>
       </tr>
       <tr *ngIf="settings.showTotalRow" style="font-weight: bold">
-        <td *ngIf="settings.showchecksColumn">
-
-        </td>
+        <td *ngIf="settings.showchecksColumn"></td>
+        <td *ngIf="settings.showRadioButtonColumn"></td>
         <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
             [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
             *ngFor="let column of settings.columns; let index = index;">

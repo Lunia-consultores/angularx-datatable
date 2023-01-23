@@ -199,6 +199,7 @@ export class VanillaViewComponent implements OnInit {
     pageSize: 2,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
+    showRadioButtonColumn: true,
     usePagination: false
   };
 
@@ -220,5 +221,4 @@ export class VanillaViewComponent implements OnInit {
   public checkBoxChanged(): void {
     console.log(this.angularxDatatableComponent.getSelectedRows());
   }
-
 }
