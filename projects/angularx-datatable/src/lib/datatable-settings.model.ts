@@ -21,6 +21,7 @@ export interface DatatableSettings {
   defaultSortColumnIndex?: number;
   defaultShortColumn?: SortColumn;
   cursorPointerRow?: boolean;
+  totalizeSelectedRows?: boolean;
 }
 
 export interface ColumnSettings {

@@ -14,7 +14,7 @@ import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.dir
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
-import {DatePipe} from '@angular/common';
+import {CurrencyPipe, DatePipe, DecimalPipe, SlicePipe} from '@angular/common';
 
 @Component({
   selector: 'lib-angularx-base-datatable',
@@ -91,7 +91,10 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   constructor(public sanitized: DomSanitizer,
               public saveTableConfiguration: SaveTableConfigurationService,
               private datePipe: DatePipe,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private currencyPipe: CurrencyPipe,
+              private decimalPipe: DecimalPipe,
+              private slicePipe: SlicePipe) {
   }
 
   public ngAfterViewInit(): void {
@@ -142,6 +145,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   public selectRow($event, field): void {
     field.checked = $event.target.checked;
     this.checkSelectAll();
+    this.obtenerTotalColumna(field)
     this.checkBoxChanged.emit();
   }
 
@@ -428,24 +432,59 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     this.resetPage();
   }
 
-  public getColumnTotal(column: ColumnSettings): number {
+  public obtenerTotalColumna(columna: ColumnSettings) {
 
-    const property = column.property;
-    let total = 0;
+    const propiedadColumna = columna.property;
+    let totalesResultados = 0;
+    let totalesResultadosSelected = 0;
+    let totalesResultadosSelectedFormateado = null;
 
-    if (column.totalizeWhen) {
+    if (columna.totalizeWhen) {
       this.tableData.forEach(row => {
-        if (column.totalizeWhen(row)) {
-          total += row[property];
+        if (columna.totalizeWhen(row)) {
+          totalesResultados += row[propiedadColumna];
+          if (this.settings.totalizeSelectedRows) {
+            if (row.checked) {
+              totalesResultadosSelected += row[propiedadColumna];
+            }
+          }
         }
       });
     } else {
       this.tableData.forEach(row => {
-        total += row[property];
+        totalesResultados += row[propiedadColumna];
+        if (this.settings.totalizeSelectedRows) {
+          if (row.checked) {
+            totalesResultadosSelected += row[propiedadColumna];
+          }
+        }
       });
     }
+    console.log(totalesResultadosSelected);
+    switch (columna.type) {
+      case 'number':
+        // @ts-ignore
+        totalesResultados = this.decimalPipe.transform(totalesResultados, '0.0-2');
+        if (this.settings.totalizeSelectedRows && totalesResultadosSelected > 0) {
+          // @ts-ignore
+          totalesResultadosSelectedFormateado = this.decimalPipe.transform(totalesResultadosSelected, '0.0-2');
+        }
+        break;
+      case 'currency':
+        // @ts-ignore
+        totalesResultados = this.currencyPipe.transform(totalesResultados, 'EUR');
+        if (this.settings.totalizeSelectedRows && totalesResultadosSelected > 0) {
+          // @ts-ignore
+          totalesResultadosSelectedFormateado = this.currencyPipe.transform(totalesResultadosSelected, 'EUR');
+        }
+        break;
+    }
 
-    return total;
+    if (this.settings.totalizeSelectedRows && totalesResultadosSelected > 0) {
+        return totalesResultados + ' (Seleccionado: ' + totalesResultadosSelectedFormateado + ')';
+    }
+
+    return totalesResultados;
   }
 
   public storeActivePage(): void {

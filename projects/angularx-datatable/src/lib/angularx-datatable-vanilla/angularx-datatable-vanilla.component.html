@@ -131,10 +131,10 @@
             *ngFor="let column of settings.columns; let index = index;">
 
         <span
-          *ngIf="column.totalize && column.type === 'currency'">{{getColumnTotal(column) | currency: 'EUR'}}</span>
-          <span *ngIf="column.totalize && column.type === 'custom'">{{getColumnTotal(column)}}</span>
+          *ngIf="column.totalize && column.type === 'currency'">{{obtenerTotalColumna(column) | currency: 'EUR'}}</span>
+          <span *ngIf="column.totalize && column.type === 'custom'">{{obtenerTotalColumna(column)}}</span>
           <span
-            *ngIf="column.totalize && column.type === 'number'">{{getColumnTotal(column) | number: '0.0-3'}}</span>
+            *ngIf="column.totalize && column.type === 'number'">{{obtenerTotalColumna(column) | number: '0.0-3'}}</span>
 
         </td>
         <td *ngIf="settings.rowActions">

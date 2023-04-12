@@ -27,16 +27,7 @@ export class BootstrapViewComponent implements OnInit {
         name: 'Línea',
         property: 'numero_linea',
         totalize: true,
-        totalizeWhen: (row) => {
-          return row.nombre === 'Tomi';
-        },
-        type: 'number'
-      },
-      {
-        name: 'Línea',
-        property: 'numero_linea',
-        totalize: true,
-        type: 'number'
+        type: 'currency'
       },
       {
         name: 'Nombre',
@@ -83,6 +74,7 @@ export class BootstrapViewComponent implements OnInit {
         }
       }
     ],
+    totalizeSelectedRows: true,
     rowActions: [
       {
         name: 'Modificar',
