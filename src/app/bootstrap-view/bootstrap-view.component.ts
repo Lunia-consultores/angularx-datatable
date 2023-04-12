@@ -210,5 +210,4 @@ export class BootstrapViewComponent implements OnInit {
   public checkBoxChanged(): void {
     console.log(this.angularxDatatableComponent.getSelectedRows());
   }
-
 }

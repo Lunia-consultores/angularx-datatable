@@ -149,6 +149,14 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     this.checkBoxChanged.emit();
   }
 
+  public selectRowRadioButtonSelected($event, selectedRow): void {
+    this.tableData.forEach(row => {
+        row.checked = false;
+    });
+    selectedRow.checked = $event.target.checked;
+    window.dispatchEvent(new CustomEvent('RadioButtonSelected', {detail: selectedRow}));
+  }
+
   public selectAll($event): void {
     this.tableData.forEach(row => {
       if (row.checkable) {
