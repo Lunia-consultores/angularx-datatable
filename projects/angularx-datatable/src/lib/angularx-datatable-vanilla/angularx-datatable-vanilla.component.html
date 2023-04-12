@@ -135,13 +135,9 @@
         <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
             [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
             *ngFor="let column of settings.columns; let index = index;">
-
-        <span
-          *ngIf="column.totalize && column.type === 'currency'">{{obtenerTotalColumna(column) | currency: 'EUR'}}</span>
-          <span *ngIf="column.totalize && column.type === 'custom'">{{obtenerTotalColumna(column)}}</span>
-          <span
-            *ngIf="column.totalize && column.type === 'number'">{{obtenerTotalColumna(column) | number: '0.0-3'}}</span>
-
+          <ng-container *ngIf="column.totalize">
+            <span>{{obtenerTotalColumna(column)}}</span>
+          </ng-container>
         </td>
         <td *ngIf="settings.rowActions">
         </td>

@@ -468,7 +468,6 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
         }
       });
     }
-    console.log(totalesResultadosSelected);
     switch (columna.type) {
       case 'number':
         // @ts-ignore

@@ -27,10 +27,7 @@ export class VanillaViewComponent implements OnInit {
         name: 'Línea',
         property: 'numero_linea',
         totalize: true,
-        totalizeWhen: (row) => {
-          return row.nombre === 'Tomi';
-        },
-        type: 'number'
+        type: 'currency'
       },
       {
         name: 'Nombre',
@@ -120,7 +117,8 @@ export class VanillaViewComponent implements OnInit {
     pageSize: 15,
     classes: '',
     showchecksColumn: true,
-    cursorPointerRow: true
+    cursorPointerRow: true,
+    totalizeSelectedRows: true,
   };
   public tableSettings2: DatatableSettings = {
     title: '',
