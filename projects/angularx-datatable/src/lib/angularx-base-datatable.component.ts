@@ -145,7 +145,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   public selectRow($event, field): void {
     field.checked = $event.target.checked;
     this.checkSelectAll();
-    this.obtenerTotalColumna(field)
+    this.obtenerTotalColumna(field);
     this.checkBoxChanged.emit();
   }
 
@@ -440,7 +440,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     this.resetPage();
   }
 
-  public obtenerTotalColumna(columna: ColumnSettings) {
+  public obtenerTotalColumna(columna: ColumnSettings): number | string {
 
     const propiedadColumna = columna.property;
     let totalesResultados = 0;
@@ -520,7 +520,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private calcularElementosAMostrarSelect() {
+  private calcularElementosAMostrarSelect(): void {
     this.elementosAMostrar = this.settings.pageSize;
     this.elementosAMostrarSelect = [];
     for (let i = 0; i < 4; i++) {
