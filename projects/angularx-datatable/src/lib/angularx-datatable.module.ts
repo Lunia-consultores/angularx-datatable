@@ -26,7 +26,11 @@ import {AngularxBaseDatatableComponent} from './angularx-base-datatable.componen
     NgbPaginationModule,
     ReactiveFormsModule
   ],
-  exports: [AngularxBaseDatatableComponent, AngularxDatatableBootstrapComponent, AngularxDatatableVanillaComponent],
+  exports: [
+    AngularxBaseDatatableComponent,
+    AngularxDatatableBootstrapComponent,
+    AngularxDatatableVanillaComponent
+  ],
   providers: [
     SaveTableConfigurationService,
     DatePipe,
