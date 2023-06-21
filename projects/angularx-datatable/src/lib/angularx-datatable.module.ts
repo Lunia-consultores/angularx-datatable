@@ -28,7 +28,12 @@ import { AngularxDatatableTailwindComponent } from './angularx-datatable-tailwin
     NgbPaginationModule,
     ReactiveFormsModule
   ],
-  exports: [AngularxBaseDatatableComponent, AngularxDatatableBootstrapComponent, AngularxDatatableVanillaComponent, AngularxDatatableTailwindComponent],
+  exports: [
+    AngularxBaseDatatableComponent,
+    AngularxDatatableBootstrapComponent,
+    AngularxDatatableVanillaComponent,
+    AngularxDatatableTailwindComponent
+  ],
   providers: [
     SaveTableConfigurationService,
     DatePipe,

@@ -90,11 +90,11 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
 
   constructor(public sanitized: DomSanitizer,
               public saveTableConfiguration: SaveTableConfigurationService,
-              private datePipe: DatePipe,
-              private formBuilder: UntypedFormBuilder,
-              private currencyPipe: CurrencyPipe,
-              private decimalPipe: DecimalPipe,
-              private slicePipe: SlicePipe) {
+              public datePipe: DatePipe,
+              public formBuilder: UntypedFormBuilder,
+              public currencyPipe: CurrencyPipe,
+              public decimalPipe: DecimalPipe,
+              public slicePipe: SlicePipe) {
   }
 
   public ngAfterViewInit(): void {
