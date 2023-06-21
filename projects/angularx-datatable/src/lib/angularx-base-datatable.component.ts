@@ -12,7 +12,7 @@ import {
 import {ColumnSettings, DatatableSettings} from './datatable-settings.model';
 import {NgbdSortableHeaderDirective, SortEvent} from './ngbd-sortable-header.directive';
 import {DomSanitizer} from '@angular/platform-browser';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {SaveTableConfigurationService} from './save-table-configuration.service';
 import {CurrencyPipe, DatePipe, DecimalPipe, SlicePipe} from '@angular/common';
 
@@ -28,7 +28,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   @ViewChildren(NgbdSortableHeaderDirective) headers: QueryList<NgbdSortableHeaderDirective>;
   public uuid = this.uuidv4();
   public page = 1;
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   public tableData = [];
   public originalTableData = [];
   private sortDirection = '';
@@ -91,7 +91,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   constructor(public sanitized: DomSanitizer,
               public saveTableConfiguration: SaveTableConfigurationService,
               private datePipe: DatePipe,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private currencyPipe: CurrencyPipe,
               private decimalPipe: DecimalPipe,
               private slicePipe: SlicePipe) {
