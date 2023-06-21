@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AngularxBaseDatatableComponent} from '../angularx-base-datatable.component';
 
 interface Paginacion {
@@ -11,11 +11,11 @@ interface Paginacion {
 }
 
 @Component({
-  selector: 'lib-angularx-datatable-vanilla',
-  templateUrl: './angularx-datatable-vanilla.component.html',
-  styleUrls: ['./angularx-datatable-vanilla.component.css']
+  selector: 'lib-angularx-datatable-tailwind',
+  templateUrl: './angularx-datatable-tailwind.component.html',
+  styleUrls: ['./angularx-datatable-tailwind.component.css']
 })
-export class AngularxDatatableVanillaComponent extends AngularxBaseDatatableComponent implements OnInit {
+export class AngularxDatatableTailwindComponent extends AngularxBaseDatatableComponent {
 
   public dropdownColumnasVisibles: boolean = false as boolean;
   public paginacion = {} as Paginacion;

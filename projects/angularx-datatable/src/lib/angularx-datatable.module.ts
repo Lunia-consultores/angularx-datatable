@@ -10,13 +10,15 @@ import {
 } from './angularx-datatable-bootstrap/angularx-datatable-bootstrap.component';
 import {AngularxDatatableVanillaComponent} from './angularx-datatable-vanilla/angularx-datatable-vanilla.component';
 import {AngularxBaseDatatableComponent} from './angularx-base-datatable.component';
+import { AngularxDatatableTailwindComponent } from './angularx-datatable-tailwind/angularx-datatable-tailwind.component';
 
 @NgModule({
   declarations: [
     NgbdSortableHeaderDirective,
     AngularxBaseDatatableComponent,
     AngularxDatatableBootstrapComponent,
-    AngularxDatatableVanillaComponent
+    AngularxDatatableVanillaComponent,
+    AngularxDatatableTailwindComponent
   ],
   imports: [
     NgbDropdownModule,
@@ -26,7 +28,7 @@ import {AngularxBaseDatatableComponent} from './angularx-base-datatable.componen
     NgbPaginationModule,
     ReactiveFormsModule
   ],
-  exports: [AngularxBaseDatatableComponent, AngularxDatatableBootstrapComponent, AngularxDatatableVanillaComponent],
+  exports: [AngularxBaseDatatableComponent, AngularxDatatableBootstrapComponent, AngularxDatatableVanillaComponent, AngularxDatatableTailwindComponent],
   providers: [
     SaveTableConfigurationService,
     DatePipe,

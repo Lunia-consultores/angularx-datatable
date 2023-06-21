@@ -1,0 +1,183 @@
+<div *ngIf="tableData">
+  <div style="display: flex; justify-content: space-between">
+    <div class="texto-silenciado">
+      <span *ngIf="(getCheckedRowsNumber() > 0)">
+        <strong>{{getCheckedRowsNumber()}}</strong>
+        <span *ngIf="getCheckedRowsNumber() ==1"> {{'elemento seleccionado' | translate }}.</span>
+        <span *ngIf="getCheckedRowsNumber() !=1"> {{'elementos seleccionados' | translate }}.</span>
+      </span>
+    </div>
+    <div style="display: flex; justify-content: flex-end">
+      <div>
+        <ng-container *ngFor="let tableAction of settings.tableActions">
+          <button *ngIf="(getCheckedRowsNumber() > 0) || (tableAction.visible === true)"
+                  (click)="tableAction.callback(getSelectedRows())"
+                  class="boton-transparente {{tableAction.classes}}"><i
+            class="{{tableAction.icon}}"></i> {{tableAction.name | translate}}
+          </button>
+        </ng-container>
+        <button *ngIf="settings.enable_save_conf"
+                class="boton-transparente"
+                (click)="resetTableSavedConfig()">
+          <i class="fas fa-redo-alt" title="{{'Limpiar configuración' | translate}}"></i>
+        </button>
+      </div>
+      <div>
+        <div>
+          <button class="boton-transparente" (click)="mostrarOcultarColumnas()">
+            {{ 'Columnas' | translate }}
+            <i class="fa fa-angle-down"></i>
+          </button>
+          <div style="position: relative; width: 0; height: 0;">
+            <div
+              [class]="{'ocultar-cosas': !dropdownColumnasVisibles, 'dropdown-columnas-visibles': dropdownColumnasVisibles}">
+              <div *ngFor="let column of settings.columns; let index = index;"
+                   style="display: flex; justify-content: flex-start; margin: 5px 0">
+                <div>
+                  <input style="vertical-align: top; margin-top: 5px"
+                         (ngModelChange)="showColumnChange($event, column.property)" [(ngModel)]="column.show"
+                         type="checkbox"
+                         id="{{'col-visibility-' + index + uuid}}" name="sdssds">
+                </div>
+                <label for="{{'col-visibility-' + index + uuid}}" style="margin: 0; padding-left: 5px">
+                  {{column.name | translate}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <table class="{{settings.classes ? settings.classes : 'table-vanilla'}} table-vanilla">
+      <thead>
+      <tr [formGroup]="searchForm" class="bordes-tabla">
+        <th *ngIf="settings.showchecksColumn" style="width: 40px; text-align: center">
+          <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox"
+                 id="{{-1 + uuid}}" name="example1">
+        </th>
+        <th *ngIf="settings.showRadioButtonColumn" style="width: 40px; text-align: center; vertical-align: bottom; padding: 4px 0">
+          {{settings.labelRadioButtonColumn}}
+        </th>
+        <th [hidden]="column.show === false"
+            class="{{column.classes}}" style="cursor: pointer; vertical-align: bottom; padding: 4px 0"
+            [ngStyle]="{'width': column.width}"
+            *ngFor="let column of settings.columns; let index = index;">
+          <div sortable="{{column.property}}" (sort)="onSort($event)">
+          <span *ngIf="!column.nameInnerHtml">
+            {{column.name | translate}}
+          </span>
+            <span *ngIf="column.nameInnerHtml" [innerHtml]="column.nameInnerHtml"
+                  [title]="column.nameInnerHtmlTitle || ''"></span>
+            <i class="fas fa-chevron-down down-icon"></i>
+            <i class="fas fa-chevron-up up-icon"></i>
+          </div>
+          <div *ngIf="settings.enableColumnFilters">
+            <input type="text" class="input-buscador" [formControlName]="column.property">
+          </div>
+        </th>
+        <th *ngIf="settings.rowActions"></th>
+      </tr>
+      </thead>
+      <tbody #table>
+      <tr (click)="rowClick(row)"
+          *ngFor="let row of settings.usePagination ? (tableData | slice: (paginacion.pagina_actual-1) * elementosAMostrar : (paginacion.pagina_actual-1) * elementosAMostrar + elementosAMostrar) : tableData; let index = index;"
+          [class]="'bordes-tabla ' + getRowClass(row)">
+        <td *ngIf="settings.showchecksColumn" style="text-align: center">
+          <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)"
+                 id="{{index + uuid}}" name="example1">
+        </td>
+        <td *ngIf="settings.showRadioButtonColumn" style="text-align: center">
+          <input [checked]="row.checked" type="radio" (change)="selectRowRadioButtonSelected($event, row)"
+                 id="{{index + uuid}}" name="{{index + uuid}}">
+        </td>
+        <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes"
+            [headers]="[index + 1]"
+            [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+            *ngFor="let column of settings.columns; let index = index;" style="padding-top: 4px; padding-bottom: 4px;">
+          <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
+          <span *ngIf="column.type === 'number'">{{row[column.property] | number: '0.0-3'}}</span>
+          <span *ngIf="column.type === 'icon'">
+            <ng-container *ngFor="let iconCase of column.iconCases" [ngSwitch]="row[column.property]">
+              <span *ngSwitchCase="iconCase.id" class="{{iconCase.class}}">
+              <i class="{{iconCase.icon}}"></i>
+              </span>
+            </ng-container>
+          </span>
+
+          <span *ngIf="column.type === 'date'">{{row[column.property] | date: 'dd/MM/yyyy'}}</span>
+
+          <span *ngIf="column.type === 'anchor'"><a href="javascript:void(0);" class="enlace-datatable"
+                                                    (click)="column.callback(row)">{{row[column.property]}}</a></span>
+
+          <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
+
+          <div *ngIf="column.type === 'custom'"
+               [innerHTML]="sanitized.bypassSecurityTrustHtml(column.customContent(row))"
+               (click)="callback(column, row)">
+          </div>
+        </td>
+        <td *ngIf="settings.rowActions" style="text-align: right">
+        <span *ngFor="let action of settings.rowActions" class="ml-2">
+          <button *ngIf="getActionVisivility(action, row)"
+                  class="{{action.classes ? action.classes : 'boton-acciones'}}"
+                  (click)="action.callback(row)">
+            <i class="{{action.icon}}"></i>{{action.name | translate}}
+          </button>
+        </span>
+
+        </td>
+      </tr>
+      <tr *ngIf="settings.showTotalRow" style="font-weight: bold">
+        <td *ngIf="settings.showchecksColumn"></td>
+        <td *ngIf="settings.showRadioButtonColumn"></td>
+        <td style="cursor: pointer" [ngClass]="column.classes" [headers]="[index + 1]"
+            [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
+            *ngFor="let column of settings.columns; let index = index;">
+          <ng-container *ngIf="column.totalize">
+            <span>{{obtenerTotalColumna(column)}}</span>
+          </ng-container>
+        </td>
+        <td *ngIf="settings.rowActions">
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
+    <div class="texto-silenciado">{{ 'Mostrando' | translate}}
+      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)">
+        <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
+          <option *ngIf="tableData.length >= elementoAMostrar"
+                  [defaultSelected]="elementoAMostrar === this.settings.pageSize"
+                  [value]="elementoAMostrar">{{elementoAMostrar}}</option>
+        </ng-container>
+        <option [value]="'all'">Todos</option>
+      </select>
+      <ng-container *ngIf="!allSelected">
+        {{ ' elementos de ' | translate }}<span><b>{{tableData.length}}</b></span>.
+      </ng-container>
+      <ng-container *ngIf="allSelected">
+        <span>{{' los elementos' | translate}}</span>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="paginacion !== undefined">
+      <ul class="paginacion" style="display: flex">
+        <li class="{{ paginacion.pagina_actual === 1 ? 'pagina-deshabilitada': ''}} borde-radio-izquierda"
+            (click)="paginaAnterior()">
+          <span class="flechas"><<</span>
+        </li>
+        <li *ngFor="let pagina of paginacion.paginas_a_mostrar" (click)="navegarPagina(pagina)"
+            [ngClass]="{'pagina-seleccionada': this.paginacion.pagina_actual == pagina, 'pagina-deshabilitada': pagina == '...', '': this.paginacion.pagina_actual != pagina && pagina != '...'}">
+          {{pagina}}
+        </li>
+        <li (click)="siguientePagina()"
+            class="{{ paginacion.pagina_actual === paginacion.total_paginas ? 'pagina-deshabilitada': ''}} borde-radio-derecha">
+          <span class="flechas">>></span>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</div>
