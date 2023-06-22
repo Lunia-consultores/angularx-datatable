@@ -48,7 +48,7 @@ export class TailwindViewComponent implements OnInit {
         property: 'telefono',
         type: 'custom',
         customContent: (row) => {
-          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
+          return `<span class="text-green-600"><i class="fa fa-check"></i></span>`;
         }
       },
       {
@@ -70,7 +70,7 @@ export class TailwindViewComponent implements OnInit {
         property: 'telefono',
         type: 'custom',
         customContent: (row) => {
-          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
+          return `<span class="text-green-600"><i class="fa fa-check"></i></span>`;
         }
       }
     ],
@@ -83,7 +83,7 @@ export class TailwindViewComponent implements OnInit {
     ],
     rowStyles: [
       {
-        classes: 'table-danger',
+        classes: 'bg-red-200',
         dataField: 'nombre',
         callback: (row) => {
           return row.nombre === 'Miguel';
@@ -93,14 +93,14 @@ export class TailwindViewComponent implements OnInit {
     tableActions: [
       {
         name: 'Borrar',
-        classes: 'text-danger',
+        classes: 'text-red-600 pr-2',
         icon: 'fas fa-trash',
         callback: (rows) => {
         },
       },
       {
         name: 'Imprimir',
-        classes: 'text-info',
+        classes: 'text-cyan-600 pr-2',
         icon: 'fas fa-print',
         callback: (rows) => {
         },
@@ -158,14 +158,14 @@ export class TailwindViewComponent implements OnInit {
         property: 'telefono',
         type: 'custom',
         customContent: (row) => {
-          return `<span class="text-success"><i class="fa fa-check"></i></span>`;
+          return `<span class="text-green-600"><i class="fa fa-check"></i></span>`;
         }
       }
     ],
     rowActions: [
       {
         name: 'Modificar',
-        classes: 'btn btn-sm btn-warning',
+        classes: 'p-1 text-white-900 border border-yellow-300 rounded-lg bg-yellow-400 sm:text-xs focus:ring-yellow-500 focus:border-yellow-500 dark:bg-yellow-700 dark:border-yellow-600 dark:placeholder-yellow-400 dark:text-white dark:focus:ring-yellow-500 dark:focus:border-yellow-500',
         callback: (row) => {
         },
       },
@@ -173,14 +173,14 @@ export class TailwindViewComponent implements OnInit {
     tableActions: [
       {
         name: 'Borrar',
-        classes: 'btn btn-link text-danger',
+        classes: 'text-red-600 pr-2',
         icon: 'fas fa-trash',
         callback: (rows) => {
         },
       },
       {
         name: 'Imprimir',
-        classes: 'btn btn-link text-dark',
+        classes: 'text-cyan-600 pr-2',
         icon: 'fas fa-print',
         callback: (rows) => {
         },
@@ -196,7 +196,6 @@ export class TailwindViewComponent implements OnInit {
     pageSize: 2,
     classes: 'table-sm table-striped',
     showchecksColumn: true,
-    showRadioButtonColumn: true,
     labelRadioButtonColumn: '',
     usePagination: false
   };

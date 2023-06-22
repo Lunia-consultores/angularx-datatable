@@ -1,8 +1,27 @@
 <div>
-  <lib-angularx-datatable-tailwind [settings]="tableSettings"
-                                   [data]="data"
-                                   (checkBoxChanged)="checkBoxChanged()"
-                                   #angularxDatatableComponent></lib-angularx-datatable-tailwind>
-
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="mt-8 flow-root grid grid-cols-2">
+      <div class="col-span-1 -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-2">
+        <div class="py-2 align-middle sm:px-6 lg:px-8">
+          <div class="relative">
+            <div class="block p-6 bg-light border border-gray-200 rounded-lg">
+              <lib-angularx-datatable-tailwind [settings]="tableSettings"
+                                               [data]="data"
+                                               (checkBoxChanged)="checkBoxChanged()"
+                                               #angularxDatatableComponent></lib-angularx-datatable-tailwind>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-1 -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-2">
+        <div class="py-2 align-middle sm:px-6 lg:px-8">
+          <div class="relative">
+            <div class="block p-6 bg-light border border-gray-200 rounded-lg">
+              <lib-angularx-datatable-tailwind [settings]="tableSettings2" [data]="data"></lib-angularx-datatable-tailwind>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-

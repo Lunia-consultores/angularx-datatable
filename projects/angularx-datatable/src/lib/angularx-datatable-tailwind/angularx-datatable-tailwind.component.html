@@ -1,13 +1,13 @@
 <div *ngIf="tableData">
   <div style="display: flex; justify-content: space-between">
-    <div class="texto-silenciado">
+    <div class="text-gray-500">
       <span *ngIf="(getCheckedRowsNumber() > 0)">
         <strong>{{getCheckedRowsNumber()}}</strong>
         <span *ngIf="getCheckedRowsNumber() ==1"> {{'elemento seleccionado' | translate }}.</span>
         <span *ngIf="getCheckedRowsNumber() !=1"> {{'elementos seleccionados' | translate }}.</span>
       </span>
     </div>
-    <div style="display: flex; justify-content: flex-end">
+    <div style="display: flex; justify-content: flex-end" class="mb-2">
       <div>
         <ng-container *ngFor="let tableAction of settings.tableActions">
           <button *ngIf="(getCheckedRowsNumber() > 0) || (tableAction.visible === true)"
@@ -17,7 +17,7 @@
           </button>
         </ng-container>
         <button *ngIf="settings.enable_save_conf"
-                class="boton-transparente"
+                class="pr-2"
                 (click)="resetTableSavedConfig()">
           <i class="fas fa-redo-alt" title="{{'Limpiar configuración' | translate}}"></i>
         </button>
@@ -50,18 +50,19 @@
     </div>
   </div>
   <div>
-    <table class="{{settings.classes ? settings.classes : 'table-vanilla'}} table-vanilla">
+    <table class="{{settings.classes ? settings.classes : ''}} min-w-full table-fixed divide-y divide-gray-300 border-t">
       <thead>
-      <tr [formGroup]="searchForm" class="bordes-tabla">
-        <th *ngIf="settings.showchecksColumn" style="width: 40px; text-align: center">
+      <tr [formGroup]="searchForm">
+        <th *ngIf="settings.showchecksColumn" scope="col" class="relative px-7 sm:w-12 sm:px-6">
           <input formControlName="checkSelectAll" (change)="selectAll($event)" type="checkbox"
+                 class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                  id="{{-1 + uuid}}" name="example1">
         </th>
-        <th *ngIf="settings.showRadioButtonColumn" style="width: 40px; text-align: center; vertical-align: bottom; padding: 4px 0">
+        <th *ngIf="settings.showRadioButtonColumn">
           {{settings.labelRadioButtonColumn}}
         </th>
-        <th [hidden]="column.show === false"
-            class="{{column.classes}}" style="cursor: pointer; vertical-align: bottom; padding: 4px 0"
+        <th scope="col" [hidden]="column.show === false"
+            class="{{column.classes}} pr-1 py-1 text-left text-sm font-semibold text-gray-900"
             [ngStyle]="{'width': column.width}"
             *ngFor="let column of settings.columns; let index = index;">
           <div sortable="{{column.property}}" (sort)="onSort($event)">
@@ -74,28 +75,32 @@
             <i class="fas fa-chevron-up up-icon"></i>
           </div>
           <div *ngIf="settings.enableColumnFilters">
-            <input type="text" class="input-buscador" [formControlName]="column.property">
+            <input type="text" class="p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-20 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   [formControlName]="column.property">
           </div>
         </th>
-        <th *ngIf="settings.rowActions"></th>
+        <th *ngIf="settings.rowActions" scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
       </tr>
       </thead>
-      <tbody #table>
+      <tbody #table class="divide-y divide-gray-200 bg-white">
       <tr (click)="rowClick(row)"
           *ngFor="let row of settings.usePagination ? (tableData | slice: (paginacion.pagina_actual-1) * elementosAMostrar : (paginacion.pagina_actual-1) * elementosAMostrar + elementosAMostrar) : tableData; let index = index;"
-          [class]="'bordes-tabla ' + getRowClass(row)">
-        <td *ngIf="settings.showchecksColumn" style="text-align: center">
+          [class]="'bordes-tabla ' + getRowClass(row)"
+      class="even:bg-gray-100">
+        <td *ngIf="settings.showchecksColumn" class="relative px-7 sm:w-12 sm:px-6">
           <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)"
-                 id="{{index + uuid}}" name="example1">
+                 id="{{index + uuid}}" name="example1"
+                 class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
         </td>
-        <td *ngIf="settings.showRadioButtonColumn" style="text-align: center">
+        <td *ngIf="settings.showRadioButtonColumn" class="relative px-7 sm:w-12 sm:px-6">
           <input [checked]="row.checked" type="radio" (change)="selectRowRadioButtonSelected($event, row)"
                  id="{{index + uuid}}" name="{{index + uuid}}">
         </td>
         <td [ngStyle]="settings.cursorPointerRow ? {'cursor': 'pointer'} : ''" [ngClass]="column.classes"
+            class="whitespace-nowrap py-2 text-sm text-gray-900"
             [headers]="[index + 1]"
             [hidden]="ocultarColumna(column.property) || column.property === 'checked' || !getColumnByProperty(column.property) || column.visible"
-            *ngFor="let column of settings.columns; let index = index;" style="padding-top: 4px; padding-bottom: 4px;">
+            *ngFor="let column of settings.columns; let index = index;">
           <span *ngIf="column.type === 'currency'">{{row[column.property] | currency: 'EUR'}}</span>
           <span *ngIf="column.type === 'number'">{{row[column.property] | number: '0.0-3'}}</span>
           <span *ngIf="column.type === 'icon'">
@@ -108,8 +113,9 @@
 
           <span *ngIf="column.type === 'date'">{{row[column.property] | date: 'dd/MM/yyyy'}}</span>
 
-          <span *ngIf="column.type === 'anchor'"><a href="javascript:void(0);" class="enlace-datatable"
-                                                    (click)="column.callback(row)">{{row[column.property]}}</a></span>
+          <span *ngIf="column.type === 'anchor'"><button href="javascript:void(0);"
+                                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                                         (click)="column.callback(row)">{{row[column.property]}}</button></span>
 
           <span *ngIf="column.type === undefined">{{row[column.property]}}</span>
 
@@ -147,8 +153,8 @@
   </div>
 
   <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
-    <div class="texto-silenciado">{{ 'Mostrando' | translate}}
-      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)">
+    <div class="text-gray-500">{{ 'Mostrando' | translate}}
+      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)" class="text-sm py-1 rounded-lg ">
         <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
           <option *ngIf="tableData.length >= elementoAMostrar"
                   [defaultSelected]="elementoAMostrar === this.settings.pageSize"
@@ -164,18 +170,19 @@
       </ng-container>
     </div>
     <ng-container *ngIf="paginacion !== undefined">
-      <ul class="paginacion" style="display: flex">
-        <li class="{{ paginacion.pagina_actual === 1 ? 'pagina-deshabilitada': ''}} borde-radio-izquierda"
+      <ul style="display: flex">
+        <li class="{{ paginacion.pagina_actual === 1 ? 'text-gray-400': 'cursor-pointer'}} px-2 py-1 border rounded-l border-gray-200"
             (click)="paginaAnterior()">
-          <span class="flechas"><<</span>
+          <span class="text-sm"><<</span>
         </li>
         <li *ngFor="let pagina of paginacion.paginas_a_mostrar" (click)="navegarPagina(pagina)"
-            [ngClass]="{'pagina-seleccionada': this.paginacion.pagina_actual == pagina, 'pagina-deshabilitada': pagina == '...', '': this.paginacion.pagina_actual != pagina && pagina != '...'}">
+            class="px-2 py-1 border"
+            [ngClass]="{'text-white bg-indigo-500 border-indigo-500': this.paginacion.pagina_actual == pagina, 'text-gray-400 border-gray-200': pagina == '...', 'cursor-pointer': this.paginacion.pagina_actual != pagina && pagina != '...'}">
           {{pagina}}
         </li>
         <li (click)="siguientePagina()"
-            class="{{ paginacion.pagina_actual === paginacion.total_paginas ? 'pagina-deshabilitada': ''}} borde-radio-derecha">
-          <span class="flechas">>></span>
+            class="{{ paginacion.pagina_actual === paginacion.total_paginas ? 'text-gray-400': 'cursor-pointer'}} px-2 py-1 border rounded-r border-gray-200">
+          <span class="text-sm">>></span>
         </li>
       </ul>
     </ng-container>
