@@ -75,7 +75,7 @@
             <i class="fas fa-chevron-up up-icon"></i>
           </div>
           <div *ngIf="settings.enableColumnFilters">
-            <input type="text" class="p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-20 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <input type="text" class="p-1 text-sm text-gray-900 font-normal border border-gray-300 rounded-lg w-20 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    [formControlName]="column.property">
           </div>
         </th>
@@ -86,8 +86,9 @@
       <tr (click)="rowClick(row)"
           *ngFor="let row of settings.usePagination ? (tableData | slice: (paginacion.pagina_actual-1) * elementosAMostrar : (paginacion.pagina_actual-1) * elementosAMostrar + elementosAMostrar) : tableData; let index = index;"
           [class]="'bordes-tabla ' + getRowClass(row)"
-      class="even:bg-gray-100">
-        <td *ngIf="settings.showchecksColumn" class="relative px-7 sm:w-12 sm:px-6">
+          [ngClass]="{'bg-indigo-100': row.checked, 'even:bg-gray-100': !row.checked && !getRowClass(row)}">
+        <td *ngIf="settings.showchecksColumn" class="relative px-7 sm:w-12 sm:px-6"
+            [ngClass]="{'border border-r-0 border-l-2 border-l-indigo-600': row.checked}">
           <input [checked]="row.checked" type="checkbox" (change)="selectRow($event, row)"
                  id="{{index + uuid}}" name="example1"
                  class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
@@ -154,7 +155,7 @@
 
   <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
     <div class="text-gray-500">{{ 'Mostrando' | translate}}
-      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)" class="text-sm py-1 rounded-lg ">
+      <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)" class="text-sm py-1 rounded-lg">
         <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
           <option *ngIf="tableData.length >= elementoAMostrar"
                   [defaultSelected]="elementoAMostrar === this.settings.pageSize"
