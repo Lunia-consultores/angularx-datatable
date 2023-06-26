@@ -13,7 +13,7 @@ interface Paginacion {
 @Component({
   selector: 'lib-angularx-datatable-tailwind',
   templateUrl: './angularx-datatable-tailwind.component.html',
-  styleUrls: ['./angularx-datatable-tailwind.component.css']
+  styleUrls: ['./angularx-datatable-tailwind.component.css', '../tailwind.scss']
 })
 export class AngularxDatatableTailwindComponent extends AngularxBaseDatatableComponent {
 

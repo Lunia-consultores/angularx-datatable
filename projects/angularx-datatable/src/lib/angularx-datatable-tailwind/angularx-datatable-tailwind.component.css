@@ -36,3 +36,7 @@
 .up-icon {
   display: none;
 }
+
+.c-pointer {
+  cursor: pointer;
+}

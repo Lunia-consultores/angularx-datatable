@@ -1,6 +1,6 @@
 # Compilar
 
-`ng build angularx-datatable --prod`
+`npm run build:table`
 
 # Publicar
 `cd dist/angularx-datatable/` 

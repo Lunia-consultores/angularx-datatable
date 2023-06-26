@@ -50,7 +50,8 @@
     </div>
   </div>
   <div>
-    <table class="{{settings.classes ? settings.classes : ''}} min-w-full table-fixed divide-y divide-gray-300 border-t">
+    <table
+      class="{{settings.classes ? settings.classes : ''}} min-w-full table-fixed divide-y divide-gray-300 border-t">
       <thead>
       <tr [formGroup]="searchForm">
         <th *ngIf="settings.showchecksColumn" scope="col" class="relative px-7 sm:w-12 sm:px-6">
@@ -62,7 +63,7 @@
           {{settings.labelRadioButtonColumn}}
         </th>
         <th scope="col" [hidden]="column.show === false"
-            class="{{column.classes}} pr-1 py-1 text-left text-sm font-semibold text-gray-900"
+            class="{{column.classes}} pr-1 py-1 text-left text-sm font-semibold text-gray-900 c-pointer"
             [ngStyle]="{'width': column.width}"
             *ngFor="let column of settings.columns; let index = index;">
           <div sortable="{{column.property}}" (sort)="onSort($event)">
@@ -75,7 +76,8 @@
             <i class="fas fa-chevron-up up-icon"></i>
           </div>
           <div *ngIf="settings.enableColumnFilters">
-            <input type="text" class="p-1 text-sm text-gray-900 font-normal border border-gray-300 rounded-lg w-20 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <input type="text"
+                   class="p-1 text-sm text-gray-900 font-normal border border-gray-300 rounded-lg w-20 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    [formControlName]="column.property">
           </div>
         </th>
@@ -172,8 +174,9 @@
     </div>
     <ng-container *ngIf="paginacion !== undefined">
       <ul style="display: flex">
-        <li class="{{ paginacion.pagina_actual === 1 ? 'text-gray-400': 'cursor-pointer'}} px-2 py-1 border rounded-l border-gray-200"
-            (click)="paginaAnterior()">
+        <li
+          class="{{ paginacion.pagina_actual === 1 ? 'text-gray-400': 'cursor-pointer'}} px-2 py-1 border rounded-l border-gray-200"
+          (click)="paginaAnterior()">
           <span class="text-sm"><<</span>
         </li>
         <li *ngFor="let pagina of paginacion.paginas_a_mostrar" (click)="navegarPagina(pagina)"

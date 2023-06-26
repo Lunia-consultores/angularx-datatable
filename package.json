@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:table": "npx tailwindcss@latest -c ./projects/angularx-datatable/tailwind.config.js -o ./projects/angularx-datatable/src/lib/tailwind.scss & ng build angularx-datatable --configuration=production"
   },
   "private": true,
   "dependencies": {
