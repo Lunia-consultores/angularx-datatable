@@ -155,7 +155,7 @@
     </table>
   </div>
 
-  <div style="display: flex; justify-content: space-between; margin-top: 5px" *ngIf="settings.usePagination">
+  <div class="flex justify-between mt-4" *ngIf="settings.usePagination">
     <div class="text-gray-500">{{ 'Mostrando' | translate}}
       <select #elementos (change)="cambiarNumeroColumnasAMostrar(elementos.value)" class="text-sm py-1 rounded-lg">
         <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
@@ -173,7 +173,7 @@
       </ng-container>
     </div>
     <ng-container *ngIf="paginacion !== undefined">
-      <ul style="display: flex">
+      <ul class="flex">
         <li
           class="{{ paginacion.pagina_actual === 1 ? 'text-gray-400': 'cursor-pointer'}} px-2 py-1 border rounded-l border-gray-200"
           (click)="paginaAnterior()">
