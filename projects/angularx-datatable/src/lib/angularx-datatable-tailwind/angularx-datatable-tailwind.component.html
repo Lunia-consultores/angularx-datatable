@@ -161,7 +161,7 @@
         <ng-container *ngFor="let elementoAMostrar of elementosAMostrarSelect">
           <option *ngIf="tableData.length >= elementoAMostrar"
                   [defaultSelected]="elementoAMostrar === this.settings.pageSize"
-                  [value]="elementoAMostrar">{{elementoAMostrar}}</option>
+                  [ngValue]="elementoAMostrar">{{elementoAMostrar}}</option>
         </ng-container>
         <option [value]="'all'">Todos</option>
       </select>

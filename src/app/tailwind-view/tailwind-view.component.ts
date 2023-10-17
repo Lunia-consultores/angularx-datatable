@@ -4,6 +4,7 @@ import {DataService} from '../data.service';
 import {
   AngularxDatatableTailwindComponent
 } from '../../../projects/angularx-datatable/src/lib/angularx-datatable-tailwind/angularx-datatable-tailwind.component';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-tailwind-view',
@@ -205,9 +206,12 @@ export class TailwindViewComponent implements OnInit {
 
   public ngOnInit(): void {
     this.data = [];
-    setTimeout(() => {
-      this.data = this.dataService.getTrabajadores();
-    }, 1000);
+    const timerS = timer(1000, 2000);
+    timerS.subscribe({
+      next: (value) => {
+        this.data = this.dataService.getTrabajadores();
+      }
+    });
     this.data2 = this.dataService.getTrabajadores();
   }
 

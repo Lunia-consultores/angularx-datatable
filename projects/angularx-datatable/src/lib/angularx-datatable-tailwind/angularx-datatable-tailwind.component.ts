@@ -38,7 +38,7 @@ export class AngularxDatatableTailwindComponent extends AngularxBaseDatatableCom
   protected calcularPaginacion(): void {
     this.paginacion.paginas_a_mostrar = [];
     this.paginacion.elementos_por_pagina = this.settings.pageSize;
-    this.paginacion.pagina_actual = 1;
+    this.paginacion.pagina_actual = this.paginacion.pagina_actual ?? 1;
     const tieneUltimaPaginaIncompleta = this.tableData.length % this.paginacion.elementos_por_pagina !== 0;
     this.paginacion.total_paginas = Math.trunc((this.tableData.length / this.paginacion.elementos_por_pagina)) + (tieneUltimaPaginaIncompleta ? 1 : 0);
     this.navegarPagina(this.paginacion.pagina_actual);
