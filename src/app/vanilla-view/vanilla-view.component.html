@@ -9,9 +9,10 @@
       <div class="card">
         <div class="card-body">
           <lib-angularx-datatable-vanilla [settings]="tableSettings"
-                                  [data]="data"
-                                  (checkBoxChanged)="checkBoxChanged()"
-                                  #angularxDatatableComponent>
+                                          [data]="data"
+                                          (pageChanged)="cargarTelefono($event)"
+                                          (checkBoxChanged)="checkBoxChanged()"
+                                          #angularxDatatableComponent>
           </lib-angularx-datatable-vanilla>
         </div>
       </div>

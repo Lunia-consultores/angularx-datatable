@@ -198,8 +198,13 @@ export class BootstrapViewComponent implements OnInit {
   constructor(private dataService: DataService) {
   }
 
-  public ngOnInit(): void {
-    this.data = this.dataService.getTrabajadores();
+  async ngOnInit() {
+    const trabajadores = this.dataService.getTrabajadores();
+    trabajadores.forEach((row) => {
+      row.telefono = 'cargando...';
+    });
+    this.data = trabajadores;
+    await this.cargarTelefono();
     this.data2 = this.dataService.getTrabajadores();
   }
 
@@ -209,5 +214,17 @@ export class BootstrapViewComponent implements OnInit {
 
   public checkBoxChanged(): void {
     console.log(this.angularxDatatableComponent.getSelectedRows());
+  }
+
+  private async cargarTelefono(): Promise<void> {
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    //solo debe cargar los elementos de la página actual
+
+
+    for (let row of this.data) {
+      row.telefono = 'cargando...';
+      await delay(800); // wait 2 seconds
+      row.telefono = '634033415';
+    }
   }
 }

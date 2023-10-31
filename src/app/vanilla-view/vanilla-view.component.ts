@@ -4,6 +4,7 @@ import {
 } from '../../../projects/angularx-datatable/src/lib/angularx-datatable-bootstrap/angularx-datatable-bootstrap.component';
 import {DatatableSettings} from '../../../projects/angularx-datatable/src/lib/datatable-settings.model';
 import {DataService} from '../data.service';
+import {AngularxDatatableVanillaComponent} from 'angularx-datatable';
 
 @Component({
   selector: 'app-vanilla-view',
@@ -12,7 +13,7 @@ import {DataService} from '../data.service';
 })
 export class VanillaViewComponent implements OnInit {
 
-  @ViewChild('angularxDatatableComponent', {static: true}) angularxDatatableComponent: AngularxDatatableBootstrapComponent;
+  @ViewChild('angularxDatatableComponent', {static: true}) angularxDatatableComponent: AngularxDatatableVanillaComponent;
   public title = 'datable';
   public data;
   public data2;
@@ -205,11 +206,12 @@ export class VanillaViewComponent implements OnInit {
   constructor(private dataService: DataService) {
   }
 
-  public ngOnInit(): void {
-    this.data = [];
-    setTimeout(() => {
-      this.data = this.dataService.getTrabajadores();
-    }, 1000);
+  async ngOnInit() {
+    const trabajadores = this.dataService.getTrabajadores();
+    trabajadores.forEach((row) => {
+      row.telefono = 'cargando...';
+    });
+    this.data = trabajadores;
     this.data2 = this.dataService.getTrabajadores();
   }
 
@@ -219,5 +221,20 @@ export class VanillaViewComponent implements OnInit {
 
   public checkBoxChanged(): void {
     console.log(this.angularxDatatableComponent.getSelectedRows());
+  }
+
+  public async cargarTelefono($event: number): Promise<void> {
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    //debe de solo cargar los elementos máximos por pagina, teneniento en cuenta $event que es la página actual de la tabla
+
+    const trabajadoresPaginaActual = this.data.slice(($event - 1) * this.tableSettings.pageSize, $event * this.tableSettings.pageSize);
+
+    for (let row of trabajadoresPaginaActual) {
+      row.telefono = 'cargando...';
+      await delay(200); // wait 2 seconds
+      row.telefono = '634033415';
+    }
+
   }
 }

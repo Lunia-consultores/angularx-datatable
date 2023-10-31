@@ -37,6 +37,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
   public elementosAMostrarSelect: number[] = [];
   public allSelected = false;
   public optionSelected: number | string = undefined;
+  @Output() public pageChanged = new EventEmitter<number>();
 
   get data(): any {
     return this.tableData;
@@ -151,7 +152,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
 
   public selectRowRadioButtonSelected($event, selectedRow): void {
     this.tableData.forEach(row => {
-        row.checked = false;
+      row.checked = false;
     });
     selectedRow.checked = $event.target.checked;
     window.dispatchEvent(new CustomEvent('RadioButtonSelected', {detail: selectedRow}));
@@ -488,7 +489,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
     }
 
     if (this.settings.totalizeSelectedRows && totalesResultadosSelected > 0) {
-        return totalesResultados + ' (Seleccionado: ' + totalesResultadosSelectedFormateado + ')';
+      return totalesResultados + ' (Seleccionado: ' + totalesResultadosSelectedFormateado + ')';
     }
 
     return totalesResultados;
@@ -496,6 +497,7 @@ export class AngularxBaseDatatableComponent implements OnInit, AfterViewInit {
 
   public storeActivePage(): void {
     this.saveTableConfiguration.saveTableActivePage(this.settings.table_uuid, this.page);
+    this.pageChanged.emit(this.page);
   }
 
   private resetPage(): void {
